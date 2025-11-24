@@ -264,3 +264,6 @@ From my point of view, when I ask “What MCP server should I use for X?”, thi
 
 Everything else (FastMCP, environment variables, CSV plumbing) is there just to make that interaction reliable and easy to reuse.
 
+If the LLM ever fails (for example, rate limits or bad JSON),
+the server prints a clear message and automatically falls back to the local
+heuristic ranking so I still get a sensible answer instead of an error.

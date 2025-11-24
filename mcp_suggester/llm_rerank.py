@@ -230,5 +230,9 @@ def llm_rerank(
 
         return suggestions[:top_n]
     except Exception as exc:  # noqa: BLE001
-        print(f"WARNING: LLM rerank failed, falling back to heuristic: {exc}")
+        # If the LLM call fails for any reason, fall back to a simpler but
+        # predictable heuristic ranking so the caller still gets a result.
+        print(
+            f"WARNING: LLM rerank failed, falling back to heuristic scoring: {exc}"
+        )
         return heuristic_group_only(user_query, candidates, top_n)
