@@ -6,6 +6,12 @@ from typing import Any, Dict, List, Optional
 
 @dataclass
 class ToolEntry:
+    """
+    In-memory representation of a single row from the catalog CSV.
+
+    Each instance describes one MCP tool that belongs to one MCP server.
+    """
+
     server_name: str
     server_url: str
     server_description: str
@@ -23,11 +29,12 @@ class ToolEntry:
     @property
     def combined_text(self) -> str:
         """
-        Concatenate key text fields for keyword-based scoring:
-        server_name, server_description, tool_name, tool_description,
-        example_queries, capability_tags (joined), actions_supported (joined).
+        Concatenate the key text fields into one blob.
+
+        This is the text we use for simple keyword matching against the
+        user query before we involve embeddings or an LLM.
         """
-        parts: List[str] = [
+        text_chunks: List[str] = [
             self.server_name,
             self.server_description,
             self.tool_name,
@@ -36,9 +43,10 @@ class ToolEntry:
             "\n".join(self.capability_tags),
             "\n".join(self.actions_supported),
         ]
-        return "\n".join(p for p in parts if p)
+        return "\n".join(chunk for chunk in text_chunks if chunk)
 
 
+# These are the shapes we return from the MCP tool. They are intentionally
+# loose dictionaries because the MCP client just needs JSON-compatible data.
 ToolSuggestion = Dict[str, Any]
 ServerSuggestion = Dict[str, Any]
-

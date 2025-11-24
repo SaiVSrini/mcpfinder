@@ -9,6 +9,7 @@ from .llm_rerank import llm_rerank
 from .models import ServerSuggestion
 from .scoring import select_candidates
 
+# This is the MCP app object that Cursor (or any MCP client) will talk to.
 mcp = FastMCP(name="MCP Suggestion Engine")
 
 
@@ -21,11 +22,16 @@ def suggest_mcp_servers(
 ) -> List[ServerSuggestion]:
     """
     Suggest the best MCP servers and tools for the given user query.
+
+    The logic is:
+    - Load the catalog from CSV.
+    - Score every tool against the query and pick a shortlist.
+    - Ask the reranker (LLM or heuristic) to group and rank servers.
     """
-    entries = get_catalog()
+    catalog_entries = get_catalog()
     candidates = select_candidates(
         user_query=user_query,
-        entries=entries,
+        entries=catalog_entries,
         max_candidates=max_candidates,
         filter_tags=filter_tags,
     )
@@ -57,4 +63,3 @@ def get_mcp_app() -> FastMCP:
 
 if __name__ == "__main__":
     mcp.run()
-

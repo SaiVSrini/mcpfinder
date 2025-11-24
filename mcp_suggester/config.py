@@ -5,38 +5,41 @@ from pathlib import Path
 from typing import Optional
 
 try:
-    # Load environment variables from a .env file if present.
+    # If python-dotenv is installed, load a local .env file so I can
+    # configure things without exporting environment variables by hand.
     from dotenv import load_dotenv
 
     load_dotenv()
 except Exception:
-    # Optional dependency; ignore failures.
+    # This import is optional. If it fails, I just fall back to the
+    # normal environment variables.
     pass
 
 
 def get_catalog_path() -> str:
     """
-    Return the path to the catalog CSV.
+    Return the path to the catalog CSV file.
 
-    Defaults to ./db.csv if MCP_CATALOG_PATH is not set.
-    Raises RuntimeError if the file does not exist.
+    - Uses MCP_CATALOG_PATH if it is set.
+    - Otherwise falls back to ./db.csv relative to the project.
+    - Raises a clear error if the file does not exist.
     """
-    env_value = os.environ.get("MCP_CATALOG_PATH") or "./db.csv"
-    path = Path(env_value).expanduser().resolve()
-    if not path.exists():
+    configured_path = os.environ.get("MCP_CATALOG_PATH") or "./db.csv"
+    catalog_path = Path(configured_path).expanduser().resolve()
+    if not catalog_path.exists():
         raise RuntimeError(
-            f"Catalog file not found at '{path}'. "
+            f"Catalog file not found at '{catalog_path}'. "
             "Set MCP_CATALOG_PATH to a valid CSV path or create ./db.csv."
         )
-    return str(path)
+    return str(catalog_path)
 
 
 def get_openai_api_key() -> Optional[str]:
     """
     Return the OpenAI API key, or None if not set.
     """
-    key = os.environ.get("OPENAI_API_KEY")
-    return key if key else None
+    api_key = os.environ.get("OPENAI_API_KEY")
+    return api_key if api_key else None
 
 
 def get_model_name() -> str:
@@ -58,4 +61,3 @@ def has_openai_api_key() -> bool:
     Return True if an OpenAI API key is available.
     """
     return get_openai_api_key() is not None
-

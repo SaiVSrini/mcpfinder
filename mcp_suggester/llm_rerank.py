@@ -11,10 +11,15 @@ from .scoring import basic_score
 
 
 def _first_nonempty_line(text: str) -> str:
+    """
+    Take the first non-empty line from a block of text.
+
+    This is handy for picking a single example query from a multiline field.
+    """
     for line in (text or "").splitlines():
-        stripped = line.strip()
-        if stripped:
-            return stripped
+        stripped_line = line.strip()
+        if stripped_line:
+            return stripped_line
     return ""
 
 
@@ -25,12 +30,16 @@ def heuristic_group_only(
 ) -> List[ServerSuggestion]:
     """
     Group candidates by server_name and score using basic_score with no embeddings.
+
+    This is the fully local, deterministic path that we fall back to when
+    we cannot or do not want to call the LLM.
     """
     if not candidates:
         return []
 
     server_groups: Dict[str, List[ToolEntry]] = {}
     for entry in candidates:
+        # Group all tools by the server that owns them.
         server_groups.setdefault(entry.server_name, []).append(entry)
 
     server_suggestions: List[ServerSuggestion] = []
@@ -39,7 +48,7 @@ def heuristic_group_only(
         tool_suggestions: List[ToolSuggestion] = []
         tool_scores: List[float] = []
 
-        # Sort tools by heuristic score descending.
+        # Sort tools by heuristic score descending so the “best” tools are first.
         scored_tools: List[tuple[ToolEntry, float]] = []
         for entry in group_entries:
             score = basic_score(user_query, entry, query_embedding=None, filter_tags=None)

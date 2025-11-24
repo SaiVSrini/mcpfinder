@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """
-Generate embeddings for each row in a CSV and store them in a new column.
+Small helper script I use to generate embeddings for my catalog CSV.
 
-- Reads a CSV with a column like "embedding_text" (manual description).
-- Calls OpenAI text-embedding-3-small to embed that text.
-- Writes a new CSV with all original columns + a new "embedded_vector" column
+What it does, in my own words:
+- Reads a CSV file that has a column with free-text descriptions.
+- Calls the OpenAI embeddings API on that text.
+- Writes a new CSV with all original columns plus an "embedded_vector" column
   containing the JSON-encoded embedding.
 
-Usage:
+Example usage:
     python generate_embeddings.py \
         --input db.csv \
         --output db_with_embeddings.csv \
-        --text-column embedding_text \
+        --text-column embedded_text \
         --vector-column embedded_vector
 """
 
@@ -26,8 +27,10 @@ from typing import List, Optional
 from openai import OpenAI
 
 
-
 def parse_args() -> argparse.Namespace:
+    """
+    Parse command-line arguments for the embedding generator.
+    """
     parser = argparse.ArgumentParser(description="Generate embeddings for a CSV column.")
     parser.add_argument(
         "--input",
@@ -68,6 +71,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def get_openai_client() -> OpenAI:
+    """
+    Create an OpenAI client using the OPENAI_API_KEY from the environment.
+    """
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         print("ERROR: OPENAI_API_KEY environment variable is not set.", file=sys.stderr)
@@ -75,22 +81,27 @@ def get_openai_client() -> OpenAI:
     return OpenAI(api_key=api_key)
 
 
-def load_rows(path: str) -> List[dict]:
-    with open(path, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+def load_rows(csv_path: str) -> List[dict]:
+    """
+    Load all rows from the CSV into a list of dictionaries.
+    """
+    with open(csv_path, newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
         rows = list(reader)
     return rows
 
 
-def safe_float_list(value: str) -> Optional[List[float]]:
+def safe_float_list(raw_value: str) -> Optional[List[float]]:
     """
-    Try to parse an existing JSON list of floats. Returns None if invalid/empty.
+    Try to parse an existing JSON list of floats.
+
+    Returns None if the value is empty or not a list.
     """
-    value = (value or "").strip()
-    if not value:
+    cleaned_value = (raw_value or "").strip()
+    if not cleaned_value:
         return None
     try:
-        parsed = json.loads(value)
+        parsed = json.loads(cleaned_value)
         if isinstance(parsed, list):
             return parsed
     except Exception:
@@ -98,20 +109,25 @@ def safe_float_list(value: str) -> Optional[List[float]]:
     return None
 
 
-def embed_text(client: OpenAI, text: str, model: str, max_retries: int = 5) -> List[float]:
+def embed_text(
+    client: OpenAI,
+    text_to_embed: str,
+    model_name: str,
+    max_retries: int = 5,
+) -> List[float]:
     """
-    Call OpenAI embeddings API with simple retry logic.
+    Call the OpenAI embeddings API with simple retry logic and backoff.
     """
-    text = text.strip()
-    if not text:
+    cleaned_text = text_to_embed.strip()
+    if not cleaned_text:
         return []
 
-    delay = 1.0
+    delay_seconds = 1.0
     for attempt in range(max_retries):
         try:
             resp = client.embeddings.create(
-                model=model,
-                input=text,
+                model=model_name,
+                input=cleaned_text,
             )
             return resp.data[0].embedding
         except Exception as e:  # noqa: BLE001
@@ -119,13 +135,16 @@ def embed_text(client: OpenAI, text: str, model: str, max_retries: int = 5) -> L
             print(f"OpenAI error on attempt {attempt + 1}/{max_retries}: {e}", file=sys.stderr)
             if attempt == max_retries - 1:
                 raise
-            time.sleep(delay)
-            delay = min(delay * 2, 30.0)
+            time.sleep(delay_seconds)
+            delay_seconds = min(delay_seconds * 2, 30.0)
     # Should not reach here
     return []
 
 
 def main() -> None:
+    """
+    Entry point for the embedding generation script.
+    """
     args = parse_args()
     client = get_openai_client()
 
@@ -141,56 +160,62 @@ def main() -> None:
     if args.vector_column not in fieldnames:
         fieldnames.append(args.vector_column)
 
-    total = len(rows)
-    print(f"Total rows: {total}")
-    processed = 0
-    skipped = 0
-    embedded = 0
+    total_rows = len(rows)
+    print(f"Total rows: {total_rows}")
+    processed_rows = 0
+    skipped_rows = 0
+    embedded_rows = 0
 
-    for idx, row in enumerate(rows):
-        text = (row.get(args.text_column, "") or "").strip()
-        if not text:
-            # No text to embed
+    for row_index, row in enumerate(rows):
+        text_to_embed = (row.get(args.text_column, "") or "").strip()
+        if not text_to_embed:
+            # No text to embed for this row; just keep whatever is already there.
             row[args.vector_column] = row.get(args.vector_column, "") or ""
-            skipped += 1
+            skipped_rows += 1
             continue
 
-        existing_vec_str = row.get(args.vector_column, "")
-        existing_vec = safe_float_list(existing_vec_str)
+        existing_vector_str = row.get(args.vector_column, "")
+        existing_vector = safe_float_list(existing_vector_str)
 
-        if existing_vec is not None and not args.overwrite_existing:
-            # Already has a valid embedding, keep it
-            skipped += 1
+        if existing_vector is not None and not args.overwrite_existing:
+            # Already has a valid embedding, keep it.
+            skipped_rows += 1
             continue
 
-        # Generate new embedding
+        # Generate a fresh embedding.
         try:
-            vec = embed_text(client, text, args.model)
-        except Exception as e:
-            print(f"Failed to embed row {idx} (server_name={row.get('server_name', '')}, "
-                  f"tool_name={row.get('tool_name', '')}): {e}", file=sys.stderr)
-            # Keep previous value if any, else empty
-            row[args.vector_column] = existing_vec_str or ""
-            skipped += 1
+            new_embedding = embed_text(client, text_to_embed, args.model)
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"Failed to embed row {row_index} "
+                f"(server_name={row.get('server_name', '')}, "
+                f"tool_name={row.get('tool_name', '')}): {exc}",
+                file=sys.stderr,
+            )
+            # Keep previous value if any, else empty.
+            row[args.vector_column] = existing_vector_str or ""
+            skipped_rows += 1
             continue
 
-        row[args.vector_column] = json.dumps(vec)
-        embedded += 1
+        row[args.vector_column] = json.dumps(new_embedding)
+        embedded_rows += 1
 
-        processed += 1
-        if processed % 10 == 0 or processed == total:
-            print(f"Processed {processed}/{total} rows "
-                  f"(embedded={embedded}, skipped={skipped})")
+        processed_rows += 1
+        if processed_rows % 10 == 0 or processed_rows == total_rows:
+            print(
+                f"Processed {processed_rows}/{total_rows} rows "
+                f"(embedded={embedded_rows}, skipped={skipped_rows})"
+            )
 
     print(f"Writing output CSV to: {args.output}")
-    with open(args.output, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+    with open(args.output, "w", newline="", encoding="utf-8") as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
     print("Done.")
-    print(f"Embedded rows: {embedded}")
-    print(f"Skipped rows (empty text or already embedded): {skipped}")
+    print(f"Embedded rows: {embedded_rows}")
+    print(f"Skipped rows (empty text or already embedded): {skipped_rows}")
     print(f"Output file: {args.output}")
 
 

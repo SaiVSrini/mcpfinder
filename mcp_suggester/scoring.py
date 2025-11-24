@@ -9,12 +9,15 @@ from openai import OpenAI
 from .config import get_embedding_model, get_openai_api_key, has_openai_api_key
 from .models import ToolEntry
 
+# Very small, forgiving tokenizer: anything alphanumeric is a token.
 _TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 
 
 def tokenize(text: str) -> List[str]:
     """
-    Lowercase and split text into alphanumeric tokens.
+    Turn a piece of text into simple lowercase tokens.
+
+    This is deliberately light‑weight; we do not try to be clever here.
     """
     if not text:
         return []
@@ -23,7 +26,7 @@ def tokenize(text: str) -> List[str]:
 
 def keyword_overlap_score(query_tokens: List[str], text_tokens: List[str]) -> float:
     """
-    Compute the fraction of unique query tokens that appear in the text tokens.
+    Simple overlap: how many unique query tokens show up in the text.
     """
     if not query_tokens:
         return 0.0
@@ -35,23 +38,23 @@ def keyword_overlap_score(query_tokens: List[str], text_tokens: List[str]) -> fl
     return overlap / float(len(q_set))
 
 
-def cosine_similarity(a: List[float], b: List[float]) -> float:
+def cosine_similarity(first_vector: List[float], second_vector: List[float]) -> float:
     """
     Standard cosine similarity with zero-norm checks.
     """
-    if not a or not b or len(a) != len(b):
+    if not first_vector or not second_vector or len(first_vector) != len(second_vector):
         return 0.0
-    dot = sum(x * y for x, y in zip(a, b))
-    norm_a = math.sqrt(sum(x * x for x in a))
-    norm_b = math.sqrt(sum(y * y for y in b))
-    if norm_a == 0.0 or norm_b == 0.0:
+    dot_product = sum(x * y for x, y in zip(first_vector, second_vector))
+    first_norm = math.sqrt(sum(x * x for x in first_vector))
+    second_norm = math.sqrt(sum(y * y for y in second_vector))
+    if first_norm == 0.0 or second_norm == 0.0:
         return 0.0
-    return dot / (norm_a * norm_b)
+    return dot_product / (first_norm * second_norm)
 
 
 def generate_query_embedding(user_query: str) -> Optional[List[float]]:
     """
-    Generate an embedding for the user query using OpenAI, or return None if unavailable.
+    Turn the user query into an embedding vector using OpenAI, if possible.
     """
     if not has_openai_api_key():
         return None
@@ -79,7 +82,12 @@ def basic_score(
     filter_tags: Optional[List[str]] = None,
 ) -> float:
     """
-    Hybrid score combining keyword overlap, embedding similarity, and tag bonus.
+    Compute a single score for how well one catalog entry matches the query.
+
+    In words:
+    - Look at how much the words overlap.
+    - Blend in embedding similarity if we have both vectors.
+    - Add a small bump if the caller passed tags that match this tool.
     """
     query_tokens = tokenize(user_query)
     entry_tokens = tokenize(entry.combined_text)
@@ -112,7 +120,9 @@ def select_candidates(
     filter_tags: Optional[List[str]] = None,
 ) -> List[ToolEntry]:
     """
-    Score all entries and return up to max_candidates with positive scores.
+    Score all entries and return the strongest ones.
+
+    I think of this as the "first pass" filter before we involve the LLM.
     """
     query_embedding: Optional[List[float]] = generate_query_embedding(user_query)
 
@@ -130,4 +140,3 @@ def select_candidates(
     scored.sort(key=lambda item: item[1], reverse=True)
     top_entries = [entry for entry, _ in scored[: max_candidates or 0]]
     return top_entries
-
