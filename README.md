@@ -2,7 +2,7 @@
 
 This project is my small “router” for Model Context Protocol (MCP) servers.
 
-In plain words: I give this server a question in natural language, and it tells me which MCP server and tool are most likely to help, based on a CSV file that I maintain as a catalog.
+In plain words: I give this server a question in natural language, and it tells me which MCP server and tool are most likely to help, based on a SQLite catalog that I maintain.
 
 The goal is to make choosing the right MCP server feel like calling a single “help me pick the right tool” endpoint.
 
@@ -10,20 +10,24 @@ The goal is to make choosing the right MCP server feel like calling a single “
 
 ## How the project works (in my own words)
 
-### 1. The catalog: `db.csv`
+### 1. The catalog: `mcpfinder.sqlite`
 
-- I keep a CSV file in the project root (usually `db.csv` or `db_with_embeddings.csv`).
-- Each row describes **one tool on one MCP server**.
-- Some of the fields:
+- I keep a SQLite database (`mcpfinder.sqlite` by default) in the project root.
+- Inside it there is one table, `mcp_tools`, where each row describes **one tool on one MCP server**.
+- Some of the columns:
   - `server_name`, `server_url`, `server_description`
-  - `auth_type` and `maturity` (for example: api-key, unstable, stable)
-  - `compatability` (which clients understand it, like Cursor, Claude Desktop, etc.)
+  - `auth_type`, `maturity`, and `compatability`
   - `tool_name`, `tool_description`, and `example_queries`
-  - `capability_tags` (free‑form tags I can filter by, such as `database`, `docker`, `pdf`)
-  - `embedded_text` (a slightly richer free‑form description)
-  - `embedded_vector` (a precomputed embedding stored as JSON – a long list of floats)
+  - `capability_tags`
+  - `embedded_text` / `embedded_vector`
 
-The MCP server **never** recomputes embeddings for rows. It only reads what I already stored in the CSV.
+If I edit the CSV source of truth, I sync it into the SQLite DB with:
+
+```bash
+python -m mcp_suggester.load_mcp_csv_to_sqlite
+```
+
+The MCP server **never** recomputes embeddings for rows. It only reads what is already stored in SQLite. The active DB path can be overridden with `MCP_CATALOG_DB`.
 
 ### 2. One‑time embedding generation
 
@@ -43,43 +47,28 @@ This script:
 - For rows that have text and no valid `embedded_vector` yet, it calls the OpenAI embeddings API (`text-embedding-3-small` by default).
 - It writes the resulting vector into `embedded_vector` as JSON.
 
-After that, I can either:
-
-- Replace the original file:
-
-  ```bash
-  mv db_with_embeddings.csv db.csv
-  ```
-
-  and keep using the default `MCP_CATALOG_PATH=./db.csv`
-
-- Or point `MCP_CATALOG_PATH` directly to `db_with_embeddings.csv`.
+After that I run `python -m mcp_suggester.load_mcp_csv_to_sqlite` to copy the enriched rows
+into `mcpfinder.sqlite`, or point `MCP_CATALOG_DB` at whatever SQLite file I want.
 
 ### 3. How a query is scored
 
 When I call the MCP tool `suggest_mcp_servers`, this is roughly what happens:
 
-1. The server loads the catalog (`db.csv` by default) into memory as a list of tool entries.
-2. The server takes my `user_query` string and:
-   - Breaks it into tokens (simple lowercase word splitting).
-   - Optionally turns it into an **embedding vector** using the OpenAI embeddings API, if the `OPENAI_API_KEY` is set.
-3. For every tool entry in the catalog, the code builds a “combined text” string out of:
-   - server name and description
-   - tool name and description
-   - example queries
-   - capability tags and actions
-4. Each tool gets a **basic score** made from:
-   - **Keyword overlap** between my query tokens and that combined text.
-   - **Embedding cosine similarity** between the query embedding and the tool’s precomputed `embedded_vector` (only if both exist).
-   - A small **tag bonus** if I passed `filter_tags` that overlap with the tool’s `capability_tags`.
-5. Tools with a score of zero or less are ignored. The rest are sorted by score, and the top N (based on `max_candidates`) are kept as “candidates”.
+1. The server loads the catalog (`mcpfinder.sqlite` by default) into memory as a list of `CatalogEntry` Pydantic objects.
+2. The server runs `extract_intent(user_query)` to build a `QueryIntent`. It uses heuristics locally and upgrades with OpenAI if a key is available. The intent captures things like desired capabilities, whether the user insists on local/offline tools, and auth preferences (`api-key`, `oauth`, `none`).
+3. Every catalog entry builds a `combined_text` string from the server/tool descriptions, capability tags, compatibility strings, and example queries.
+4. The hybrid retriever scores each tool using:
+   - A TF‑IDF cosine similarity between the query tokens and the tool’s combined text.
+   - (Optional) Embedding cosine similarity between the query vector and the stored tool embedding.
+   - Capability bonuses when explicit `filter_tags` match tool tags.
+   - Intent bonuses/penalties: matching auth methods, boosting tools tagged as `local`/`free` when the user insists on those constraints, and penalizing anything that violates them.
+5. Tools with a positive score are sorted, and the best `max_candidates` items pass to the reranker.
 
-If I do not set `OPENAI_API_KEY`, the server simply:
+If I do not set `OPENAI_API_KEY`, the server:
 
-- Skips embeddings entirely.
-- Uses only keyword overlap + tag bonus.
-
-The behavior is the same overall, just less “semantic”.
+- Skips embedding generation (TF‑IDF only).
+- Keeps intent extraction purely heuristic.
+- Falls back to the deterministic grouping instead of the LLM reranker.
 
 ### 4. What the LLM does
 
@@ -161,12 +150,12 @@ pip install -r requirements.txt
 
 ### 2. Set up the catalog
 
-By default the server expects `MCP_CATALOG_PATH` to point to the catalog CSV.
+By default the server expects `MCP_CATALOG_DB` to point to the catalog SQLite file.
 
 I usually do:
 
 ```bash
-export MCP_CATALOG_PATH=./db_with_embeddings.csv  # or ./db.csv
+export MCP_CATALOG_DB=./mcpfinder.sqlite
 ```
 
 ### 3. Run the MCP server directly
@@ -188,11 +177,10 @@ Sometimes I just want to see the raw JSON without going through a client:
 
 ```bash
 python - << 'PY'
-from mcp_suggester.server import suggest_mcp_servers
-from mcp_suggester.catalog import get_catalog
+from mcp_suggester.server import suggest_mcp_servers_impl
 import json
 
-results = suggest_mcp_servers(
+results = suggest_mcp_servers_impl(
     user_query="Scan my Docker images for vulnerabilities.",
     top_n=3,
     max_candidates=20,
@@ -202,6 +190,36 @@ results = suggest_mcp_servers(
 print(json.dumps(results, indent=2))
 PY
 ```
+
+### 5. Offline evaluation
+
+The repo includes a small labeled dataset under `evaluation/eval_dataset.csv`. I can score the lexical, hybrid, and hybrid+LLM pipelines with:
+
+```bash
+python evaluation/evaluate.py
+```
+
+If `OPENAI_API_KEY` is set, the script also runs the final rerank stage; otherwise it reports the first two baselines only.
+
+### 6. HTTP helper API
+
+For tools that expect a plain HTTP endpoint, I run a small FastAPI wrapper:
+
+```bash
+uvicorn api_server:app --reload
+```
+
+`POST /recommend` accepts the exact same payload as the MCP tool and returns the same JSON, because it simply calls `suggest_mcp_servers_impl` under the hood.
+
+### 7. Optional Streamlit UI
+
+For a lightweight UI during demos, I run:
+
+```bash
+streamlit run ui_app.py
+```
+
+The app lets me type a query, tweak `top_n`/`max_candidates`, see server reasoning, and copy example tool invocations without leaving the browser.
 
 ---
 
@@ -218,7 +236,7 @@ In Cursor, I add an MCP server configuration similar to this (the exact key name
       "args": ["-m", "mcp_suggester.server"],
       "env": {
         "PYTHONPATH": "/path/to/mcpfinder",
-        "MCP_CATALOG_PATH": "/path/to/mcpfinder/db_with_embeddings.csv",
+        "MCP_CATALOG_DB": "/path/to/mcpfinder/mcpfinder.sqlite",
         "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY"
       }
     }
@@ -252,7 +270,7 @@ From there I can:
 
 The way I think about this project:
 
-- The CSV is my **source of truth** for MCP servers and tools.
+- The SQLite catalog is my **source of truth** for MCP servers and tools.
 - The embeddings turn fuzzy natural‑language questions into something I can compare numerically.
 - The scoring functions do a first pass of “roughly right” filtering and ranking.
 - The LLM then looks at a small shortlist and produces a cleaner, human‑friendly ranking and explanation.

@@ -16,22 +16,21 @@ except Exception:
     pass
 
 
-def get_catalog_path() -> str:
+def get_catalog_db_path() -> str:
     """
-    Return the path to the catalog CSV file.
+    Return the path to the SQLite catalog file.
 
-    - Uses MCP_CATALOG_PATH if it is set.
-    - Otherwise falls back to ./db.csv relative to the project.
-    - Raises a clear error if the file does not exist.
+    - Uses MCP_CATALOG_DB if it is set.
+    - Otherwise falls back to ./mcpfinder.sqlite relative to the project.
     """
-    configured_path = os.environ.get("MCP_CATALOG_PATH") or "./db.csv"
-    catalog_path = Path(configured_path).expanduser().resolve()
-    if not catalog_path.exists():
+    configured_path = os.environ.get("MCP_CATALOG_DB") or "./mcpfinder.sqlite"
+    db_path = Path(configured_path).expanduser().resolve()
+    if not db_path.exists():
         raise RuntimeError(
-            f"Catalog file not found at '{catalog_path}'. "
-            "Set MCP_CATALOG_PATH to a valid CSV path or create ./db.csv."
+            f"Catalog database not found at '{db_path}'. "
+            "Set MCP_CATALOG_DB to a valid SQLite file or create ./mcpfinder.sqlite."
         )
-    return str(catalog_path)
+    return str(db_path)
 
 
 def get_openai_api_key() -> Optional[str]:

@@ -1,0 +1,11 @@
+query_id,user_query,expected_server,expected_tool,filter_tags
+1,"List all Supabase projects in my account.","supabase","list_projects",""
+2,"Give me the latest AI policy news from trusted outlets.","brave-search","brave_news_search",""
+3,"Find the best coffee shops near downtown Austin.","brave-search","brave_local_search",""
+4,"Scan my local repository for vulnerabilities without using the internet.","trivy","scan_filesystem","security;local"
+5,"Audit a Docker image for CVEs before pushing to production.","trivy","scan_image","security;docker"
+6,"Run a Snyk code scan on my TypeScript service.","snyk","snyk_code_scan","security;code"
+7,"Search my Notion workspace for docs about onboarding.","Notion","notion-search","knowledge"
+8,"Research the newest EU AI Act updates across the web.","tavily-remote-mcp","tavily_search","research"
+9,"List every Taskade workspace I can access.","taskade","workspacesGet","productivity"
+10,"Fetch Supabase organization details for access reviews.","supabase","list_organizations","governance"
