@@ -137,17 +137,17 @@ MRR:         0.668
 
 Hybrid (Lexical + Embedding + Intent)
 -------------------------------------
-Precision@1: 0.444   (Struggles with noisy embeddings)
-Precision@3: 0.593
-Recall@3:    0.593
-MRR:         0.545
+Precision@1: 0.519  (Struggles with noisy embeddings)
+Precision@3: 0.630
+Recall@3:    0.630
+MRR:         0.592
 
 Hybrid + LLM Rerank
 -------------------
-Precision@1: 0.700   (The Winner: Best at understanding intent)
-Precision@3: 0.700
-Recall@3:    0.700
-MRR:         0.700
+Precision@1: 0.667   (The Winner: Best at understanding intent)
+Precision@3: 0.741
+Recall@3:    0.741
+MRR:         0.704
 ```
 
 *   **Precision@1**: How often the #1 answer was correct (70% for LLM).
