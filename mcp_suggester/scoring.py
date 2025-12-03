@@ -232,18 +232,19 @@ def _intent_alignment(entry: CatalogEntry, intent: QueryIntent) -> float:
 
 def _intent_penalty(entry: CatalogEntry, intent: QueryIntent) -> float:
     penalty = 0.0
+    # Reduced penalties - they were too harsh
     if intent.must_be_local and not _entry_is_local(entry):
-        penalty += 0.35
+        penalty += 0.20  # Was 0.35
     if intent.must_be_free and not _entry_is_free(entry):
-        penalty += 0.25
+        penalty += 0.15  # Was 0.25
 
     preferred_auth = (intent.preferred_auth or "").lower()
     entry_auth = (entry.auth_type or "").lower()
     if preferred_auth:
         if preferred_auth == "none" and entry_auth and entry_auth not in {"none", "local"}:
-            penalty += 0.15
+            penalty +=0.08  # Was 0.15
         elif preferred_auth not in entry_auth and preferred_auth != "none":
-            penalty += 0.05
+            penalty += 0.03  # Was 0.05
     return penalty
 
 
@@ -255,7 +256,9 @@ def _combine_scores(
     embedding_score = max(embedding_score, 0.0)
     if not has_embedding:
         return 0.85 * lexical_score
-    return 0.55 * lexical_score + 0.35 * embedding_score
+    # Adjusted: Give more weight to lexical (0.70) since embeddings seem noisy
+    # Original was 0.55 lexical + 0.35 embedding
+    return 0.70 * lexical_score + 0.20 * embedding_score
 
 
 def score_entries(

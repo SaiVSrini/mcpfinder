@@ -2,7 +2,7 @@ server_name,server_url,server_description,auth_type,maturity,compatability,tool_
 supabase,https://github.com/supabase-community/supabase-mcp,"Connects directly to Supabase projects for managing databases, executing SQL queries, applying migrations, and handling configurations through natural language commands.",Oauth,stable,"cursor
 claude_desktop
 generic_mcp_client
-openai_agents",list_projects, Lists all Supabase projects for the user.,"query1: Show me all supabase projects in my account and give me a short one-line description for each
+openai_agents",list_projects,Lists all Supabase projects for the user.,"query1: Show me all supabase projects in my account and give me a short one-line description for each
 query2:  List all my active projects and highlight which ones were created in the last 30 days
 query3: Fetch all supabase project and tell me which one has the most recent activity in the logs","multi-project-discovery
 
@@ -34,7 +34,7 @@ top-level-resource-mapping","{
 supabase,https://github.com/supabase-community/supabase-mcp,"Connects directly to Supabase projects for managing databases, executing SQL queries, applying migrations, and handling configurations through natural language commands.",Oauth,stable,"cursor
 claude_desktop
 generic_mcp_client
-openai_agents",get_project, Gets details for a project.,"query1: Get the full details of the Supabase project named my-app-prod
+openai_agents",get_project,Gets details for a project.,"query1: Get the full details of the Supabase project named my-app-prod
 query2:Fetch the project info for the project with ID abcd-1234 and tell me its region and status
 query3:Find the project that’s hosting my production API and summarize its configuration and connection string details.","project-metadata-inspection
 
@@ -339,7 +339,7 @@ developer-guidance-synthesis","{
 supabase,https://github.com/supabase-community/supabase-mcp,"Connects directly to Supabase projects for managing databases, executing SQL queries, applying migrations, and handling configurations through natural language commands.",Oauth,stable,"cursor
 claude_desktop
 generic_mcp_client
-openai_agents",list_tables, Lists all tables within the specified schemas.,"query1: List all tables in the public schema of my shop-prod project
+openai_agents",list_tables,Lists all tables within the specified schemas.,"query1: List all tables in the public schema of my shop-prod project
 query2: Show me all tables in the analytics and events schemas and give a short description based on their names
 query3:  Retrieve a list of every table in the database and mark which ones don’t have a primary key","schema-surface-mapping
 
@@ -3689,7 +3689,7 @@ codex
 generic_mcp_client
 openai_agents
 remote_ready
-local",deep_researcher_check, Check if your research is ready and get the results. Use this after starting a research task to see if it's done and get your comprehensive report.,"query1: Check if the cloud-native security research job is complete.
+local",deep_researcher_check,Check if your research is ready and get the results. Use this after starting a research task to see if it's done and get your comprehensive report.,"query1: Check if the cloud-native security research job is complete.
 query2: Retrieve the results of the ongoing LLM inference research.
 query3: Check the current progress of the research task.","async-research-status-evaluation
 
@@ -3827,7 +3827,7 @@ remote-ready
 local
 
 
-",search-actors, Search for Actors in the Apify Store.,"query1: Search the Apify Store for actors scraping Amazon product data.
+",search-actors,Search for Actors in the Apify Store.,"query1: Search the Apify Store for actors scraping Amazon product data.
 query2: Look for all social media scraping actors.
 query3: Find actors related to job listing extraction.","actor-directory-search
 
@@ -4204,7 +4204,7 @@ remote-ready
 local
 
 
-",get-dataset-schema, Generate a JSON schema from dataset items.,"query1: Generate a JSON schema for dataset ID xyz.
+",get-dataset-schema,Generate a JSON schema from dataset items.,"query1: Generate a JSON schema for dataset ID xyz.
 query2: Produce a schema for the dataset containing product listings.
 query3: Fetch the inferred schema from a crawling dataset.","schema-inference-engine
 
@@ -5534,7 +5534,8 @@ query3: Retrieve the metadata, file path, and remediation guidance for finding I
 scan-result-drilldown
 vulnerability-detail-inspection
 security-issue-lookup
-granular-scan-artifact-access"," {
+granular-scan-artifact-access
+"," {
     ""server_name"": ""trivy"",
     ""purpose"": ""Retrieve detailed information for a single Trivy scan finding"",
     ""tool"": ""findings_get"",
@@ -5585,7 +5586,8 @@ query3: List all high severity findings from the last repository scan only.","fi
 scan-result-enumeration
 vulnerability-overview-reporting
 security-issue-collection
-broad-scan-output-retrieval","{
+broad-scan-output-retrieval
+","{
     ""server_name"": ""trivy"",
     ""purpose"": ""List vulnerabilities and issues from a Trivy scan"",
     ""tool"": ""findings_list"",
@@ -5637,7 +5639,8 @@ query3: Scan the folder D:/infra/terraform for IaC misconfigurations and summari
 local-project-vulnerability-assessment
 misconfiguration-detection-local
 secrets-and-license-analysis
-holistic-local-risk-evaluation"," {
+holistic-local-risk-evaluation
+"," {
     ""server_name"": ""trivy"",
     ""purpose"": ""Scan a local filesystem for vulnerabilities, misconfigurations, licenses, and secrets"",
     ""tool"": ""scan_filesystem"",
@@ -5689,7 +5692,8 @@ query3: Scan the OCI archive at /images/app.tar for vulnerabilities and misconfi
 os-package-risk-detection
 container-misconfiguration-analysis
 registry-image-compliance-check
-image-based-security-assessment","{
+image-based-security-assessment
+","{
     ""server_name"": ""trivy"",
     ""purpose"": ""Scan container images for vulnerabilities, misconfigurations, licenses, and secrets"",
     ""tool"": ""scan_image"",
@@ -5741,7 +5745,8 @@ query3: Scan a remote repo https://gitlab.com/team/infra for IaC issues in Terra
 git-code-vulnerability-analysis
 repo-misconfiguration-detection
 remote-source-risk-evaluation
-version-controlled-code-assessment"," {
+version-controlled-code-assessment
+"," {
     ""server_name"": ""trivy"",
     ""purpose"": ""Scan remote git repositories for vulnerabilities, misconfigurations, licenses, and secrets"",
     ""tool"": ""scan_repository"",
@@ -5791,7 +5796,8 @@ query2: Get the Trivy binary version currently being used by this environment.
 query3: Display the embedded Trivy version so I can confirm compatibility.","scanner-version-identification
 environment-tooling-introspection
 compatibility-check-operation
-runtime-binary-discovery","{
+runtime-binary-discovery
+","{
     ""server_name"": ""trivy"",
     ""purpose"": ""Return the Trivy version used by the MCP server"",
     ""tool"": ""trivy_version"",
@@ -5833,7 +5839,8 @@ query3: Convert “Pydantic v2” into its appropriate Context7 library identifi
 package-name-normalization
 context7-id-mapping
 version-agnostic-library-matching
-documentation-source-linking","{
+documentation-source-linking
+","{
     ""server_name"": ""context7"",
     ""purpose"": ""Resolve a human-friendly library name into a Context7 library ID"",
     ""tool"": ""resolve-library-id"",
@@ -5876,7 +5883,8 @@ query3: Get the documentation bundle for “Express.js 5” mapped through its C
 version-specific-doc-retrieval
 api-reference-acquisition
 live-doc-syncing
-code-example-extraction","{
+code-example-extraction
+","{
     ""server_name"": ""context7"",
     ""purpose"": ""Fetch documentation and examples for a library using a Context7 ID"",
     ""tool"": ""get-library-docs"",
@@ -5918,7 +5926,8 @@ query3: Search for documents about “Docker hardening guidelines”.","workspac
 cross-tool-search-aggregation
 keyword-and-ai-querying
 global-content-discovery
-notion-multi-source-search","{
+notion-multi-source-search
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Search across your Notion workspace and connected tools"",
     ""tool"": ""notion-search"",
@@ -5961,7 +5970,8 @@ query3: Get the complete page content for the project proposal named “AI Autom
 database-content-fetching
 url-based-notion-resolution
 structured-block-extraction
-document-markdown-acquisition","{
+document-markdown-acquisition
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Fetch content and metadata for a Notion page or database by URL"",
     ""tool"": ""notion-fetch"",
@@ -6004,7 +6014,8 @@ query3: Create a new blank page in the workspace titled “To-Do — Personal”
 workspace-content-creation
 rich-text-page-building
 parent-controlled-page-creation
-metadata-initialization","{
+metadata-initialization
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Create one or more Notion pages with specified properties and content"",
     ""tool"": ""notion-create-pages"",
@@ -6047,7 +6058,8 @@ query3: Rename the page “Daily Standup Template” to “Standup Notes Templat
 block-content-modification
 document-version-adjustment
 structured-content-editing
-metadata-refinement","{
+metadata-refinement
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Update properties or content of an existing Notion page"",
     ""tool"": ""notion-update-page"",
@@ -6090,7 +6102,8 @@ query3: Move the “Sprint 12 Documents” page to the parent page “Sprint His
 page-relocation-action
 database-parent-switching
 workspace-structure-management
-content-tree-restructuring","{
+content-tree-restructuring
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Move pages or databases to a different parent within the workspace"",
     ""tool"": ""notion-move-pages"",
@@ -6133,7 +6146,8 @@ query3: Duplicate the “Frontend Style Guide” page for use in the mobile team
 content-duplication-workflow
 template-copy-action
 async-page-reproduction
-replicated-document-creation","{
+replicated-document-creation
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Duplicate an existing Notion page asynchronously"",
     ""tool"": ""notion-duplicate-page"",
@@ -6176,7 +6190,8 @@ query3: Create a new “Vendor Evaluation” database containing properties for 
 schema-definition-action
 structured-data-source-setup
 property-schema-initialization
-workspace-database-building","{
+workspace-database-building
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Create a new Notion database with an initial schema and view"",
     ""tool"": ""notion-create-database"",
@@ -6219,7 +6234,8 @@ query3: Modify the “Content Calendar” database by adding a new multi-select 
 schema-modification
 attribute-structure-editing
 source-definition-adjustment
-database-configuration-change"," {
+database-configuration-change
+"," {
     ""server_name"": ""Notion"",
     ""purpose"": ""Update properties, schema, or metadata of an existing Notion database"",
     ""tool"": ""notion-update-database"",
@@ -6264,7 +6280,8 @@ query3: Comment on the “Q4 Strategy Draft” and request clarification on the 
 collaboration-thread-initiation
 feedback-note-adding
 commentary-insertion
-discussion-starting","{
+discussion-starting
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Add a comment to a Notion page"",
     ""tool"": ""notion-create-comment"",
@@ -6307,7 +6324,8 @@ query3: Get all comments from the “Marketing Plan 2025” page along with comm
 page-discussion-fetching
 collaboration-history-extraction
 threaded-comment-listing
-feedback-log-access","{
+feedback-log-access
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""List all comments and threads on a Notion page"",
     ""tool"": ""notion-get-comments"",
@@ -6350,7 +6368,8 @@ query3: Show me all teamspaces where I have edit permissions.
 workspace-organization-discovery
 collaboration-group-retrieval
 workspace-structure-inspection
-team-directory-access","{
+team-directory-access
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Retrieve a list of teamspaces in the current Notion workspace"",
     ""tool"": ""notion-get-teams"",
@@ -6393,7 +6412,8 @@ query3: Show every workspace user sorted by their last activity timestamp.
 member-directory-access
 identity-metadata-retrieval
 collaboration-user-discovery
-workspace-member-enumeration","{
+workspace-member-enumeration
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""List all users in the workspace with their details"",
     ""tool"": ""notion-get-users"",
@@ -6436,7 +6456,8 @@ query3: Get metadata and workspace role for a specific user using their Notion I
 identity-specific-fetch
 workspace-member-inspection
 user-metadata-lookup
-targeted-user-retrieval","{
+targeted-user-retrieval
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Retrieve detailed information for a specific workspace user by ID"",
     ""tool"": ""notion-get-users"",
@@ -6479,7 +6500,8 @@ query3: Get the metadata for my authenticated Notion bot user including workspac
 workspace-context-identification
 integration-identity-fetch
 self-profile-retrieval
-agent-context-awareness","{
+agent-context-awareness
+","{
     ""server_name"": ""Notion"",
     ""purpose"": ""Retrieve information about the authenticated Notion bot user and workspace"",
     ""tool"": ""notion-get-self"",
@@ -6530,7 +6552,8 @@ query3: Search my Neon projects for anything related to “prod” or “product
 resource-discovery
 account-project-listing
 filtered-project-search
-neon-project-metadata","{
+neon-project-metadata
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""List Neon projects in the current account with optional filtering"",
     ""tool"": ""list_projects"",
@@ -6580,7 +6603,8 @@ query3: Retrieve all connected organizations and sort them alphabetically by nam
 workspace-ownership-discovery
 account-organizations-listing
 org-metadata-retrieval
-org-filter-search","{
+org-filter-search
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""List organizations the current user has access to"",
     ""tool"": ""list_organizations"",
@@ -6629,7 +6653,8 @@ query3: Retrieve the full list of projects I have shared access to, with project
 ","shared-project-listing
 collaboration-project-discovery
 access-control-project-view
-shared-resource-finder","{
+shared-resource-finder
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""List Neon projects that have been shared with the current user"",
     ""tool"": ""list_shared_projects"",
@@ -6678,7 +6703,8 @@ query3: Create a project titled “customer-activity-db” and prepare it for sc
 database-environment-provisioning
 initial-db-setup
 neon-new-project-bootstrap
-resource-provision-action","{
+resource-provision-action
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Create a new Neon project and initial database environment"",
     ""tool"": ""create_project"",
@@ -6727,7 +6753,8 @@ query3: Permanently delete the project named “temp-data-load” after verifyin
 ","project-deletion
 environment-teardown
 resource-removal-operation
-dangerous-destructive-action","{
+dangerous-destructive-action
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Delete an existing Neon project"",
     ""tool"": ""delete_project"",
@@ -6775,7 +6802,8 @@ query3: Show me the configuration details for the “metrics-pipeline” Neon pr
 ","project-introspection
 project-state-inspection
 metadata-overview-fetch
-database-topology-description"," {
+database-topology-description
+"," {
     ""server_name"": ""Neon"",
     ""purpose"": ""Describe a Neon project and its structure"",
     ""tool"": ""describe_project"",
@@ -6832,7 +6860,8 @@ query3: Run a query to count the number of rows in the “orders” table for qu
 ","single-statement-execution
 direct-sql-runner
 branch-scoped-sql
-immediate-sql-interaction","{
+immediate-sql-interaction
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Execute a single SQL statement against a Neon database"",
     ""tool"": ""run_sql"",
@@ -6889,7 +6918,8 @@ query3: Perform a batch update across multiple tables inside one consistent tran
 ","multi-statement-transaction
 atomic-sql-execution
 batch-sql-runner
-transactional-data-mutator","{
+transactional-data-mutator
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Execute multiple SQL statements in a single transaction"",
     ""tool"": ""run_sql_transaction"",
@@ -6937,7 +6967,8 @@ query3: Retrieve the schema structure of the table named “orders_archive”.
 ","schema-introspection
 table-structure-fetch
 column-metadata-retrieval
-ddl-analysis","{
+ddl-analysis
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Describe the schema of a specific table"",
     ""tool"": ""describe_table_schema"",
@@ -6984,7 +7015,8 @@ query2: Retrieve all tables from the “neondb” database and include their sch
 query3: Show me all tables in the project’s default database for review.
 ","database-table-listing
 schema-object-enumeration
-table-metadata-overview","{
+table-metadata-overview
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""List all tables in a Neon database"",
     ""tool"": ""get_database_tables"",
@@ -7031,7 +7063,8 @@ query3: Duplicate the current production branch into a sandbox branch for safe t
 ","branch-creation
 environment-forking
 isolation-layer-setup
-branching-for-testing","{
+branching-for-testing
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Create a new branch in a Neon project"",
     ""tool"": ""create_branch"",
@@ -7255,7 +7288,8 @@ query3: Approve the migration changes and merge the temporary branch into the ma
 ","migration-commit-action
 apply-schema-changes
 branch-migration-finalization
-migration-cleanup","{
+migration-cleanup
+","{
     ""server_name"": ""Neon"",
     ""purpose"": ""Complete a prepared database migration and apply it to the main branch"",
     ""tool"": ""complete_database_migration"",
@@ -8583,3 +8617,2195 @@ context-provider"," {
       ""context-provider""
     ]
   }"
+Adspirer,https://www.pulsemcp.com/servers/adspirer,"Campaign planning, research, and cross-platform ad creation",oauth,beta,"
+claude_desktop",help_user_upload,"Campaign planning, research, and cross-platform ad creation",,search,
+Adspirer,https://www.pulsemcp.com/servers/adspirer,"Campaign planning, research, and cross-platform ad creation",oauth,beta,"
+claude_desktop",validate_and_prepare_assets,"Campaign planning, research, and cross-platform ad creation","query1: I need to validate my ad creative assets and prepare them for a new product launch campaign across Facebook and Instagram.
+query2: Check if my video ad meets platform requirements for YouTube and TikTok, then prepare optimized versions for each platform
+query3: Validate my ad images and copy for compliance, then prepare cross-platform versions for my holiday campaign.","asset-validation
+cross-platform-preparation
+creative-optimization","{
+  ""server_name"": ""Adspirer"",
+  ""purpose"": ""Validate advertising assets for compliance and platform requirements, then prepare optimized versions for multiple ad platforms"",
+  ""tool"": ""validate_and_prepare_assets"",
+  ""features"": [
+    ""validate ad assets against platform requirements"",
+    ""check creative compliance and specifications"",
+    ""prepare cross-platform optimized versions""
+  ],
+  ""use_cases"": [
+    ""ensure ad creatives meet platform-specific requirements before launching campaigns"",
+    ""validate and optimize assets for multi-platform advertising campaigns"",
+    ""prepare compliant ad variations for different social media platforms""
+  ],
+  ""examples"": [
+    ""I need to validate my ad creative assets and prepare them for a new product launch campaign across Facebook and Instagram."",
+    ""Check if my video ad meets platform requirements for YouTube and TikTok, then prepare optimized versions for each platform"",
+    ""Validate my ad images and copy for compliance, then prepare cross-platform versions for my holiday campaign.""
+  ],
+  ""tags"": [
+    ""asset-validation"",
+    ""cross-platform-preparation"",
+    ""creative-optimization""
+  ]
+}"
+Adspirer,https://www.pulsemcp.com/servers/adspirer,"Campaign planning, research, and cross-platform ad creation",oauth,beta,"
+claude_desktop",create_pmax_campaign,"Campaign planning, research, and cross-platform ad creation",,search,
+Adspirer,https://www.pulsemcp.com/servers/adspirer,"Campaign planning, research, and cross-platform ad creation",oauth,beta,"
+claude_desktop",create_search_campaign,"Campaign planning, research, and cross-platform ad creation",,search,
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",register_user,Create a new account and authenticate for protected features,"query1: Use AI-Archive to register user for my workflow
+query2: I want to register user for user john@example.com with admin privileges
+query3: Show me how to register user programmatically and schedule it weekly","register-user
+user-management
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Create a new account and authenticate for protected features."",
+  ""tool"": ""register_user"",
+  ""features"": [
+    ""register user efficiently"",
+    ""secure authentication and authorization""
+  ],
+  ""use_cases"": [
+    ""streamline register user workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""Use AI-Archive to register user for my workflow"",
+    ""I want to register user for user john@example.com with admin privileges"",
+    ""Show me how to register user programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""register-user"",
+    ""user-management"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",login_user,Login with existing credentials and generate API key,"query1: Use AI-Archive to login user for my workflow
+query2: Make an API call to login user with JSON payload and return results
+query3: Integrate AI-Archive to login user and sync with my CRM system","login-user
+api-integration
+rest-api-access","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Login with existing credentials and generate API key."",
+  ""tool"": ""login_user"",
+  ""features"": [
+    ""login user efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate AI-Archive API into custom applications""
+  ],
+  ""examples"": [
+    ""Use AI-Archive to login user for my workflow"",
+    ""Make an API call to login user with JSON payload and return results"",
+    ""Integrate AI-Archive to login user and sync with my CRM system""
+  ],
+  ""tags"": [
+    ""login-user"",
+    ""api-integration"",
+    ""rest-api-access""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",search_papers,Search for research papers using keyword queries,"query1: I want to search papers that match my criteria in AI-Archive
+query2: Search and search papers matching the keyword 'machine learning'
+query3: Show me how to search papers programmatically and schedule it weekly","search-papers
+search-capability
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Search for research papers using keyword queries."",
+  ""tool"": ""search_papers"",
+  ""features"": [
+    ""search papers efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search papers that match my criteria in AI-Archive"",
+    ""Search and search papers matching the keyword 'machine learning'"",
+    ""Show me how to search papers programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search-papers"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",discover_papers,Find trending and recommended papers,"query1: I want to discover papers that match my criteria in AI-Archive
+query2: Execute discover papers with parameters from my configuration file
+query3: Automate discover papers to run daily at 9 AM and save output to my dashboard","discover-papers
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Find trending and recommended papers."",
+  ""tool"": ""discover_papers"",
+  ""features"": [
+    ""discover papers efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline discover papers workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""I want to discover papers that match my criteria in AI-Archive"",
+    ""Execute discover papers with parameters from my configuration file"",
+    ""Automate discover papers to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""discover-papers"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",get_paper,Get paper details or download complete paper with files,"query1: I need to get paper from AI-Archive for my current project
+query2: Help me get paper from the documents folder and filter by date range
+query3: Show me how to get paper programmatically and schedule it weekly","get-paper
+file-operations
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Get paper details or download complete paper with files."",
+  ""tool"": ""get_paper"",
+  ""features"": [
+    ""get paper efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get paper workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""I need to get paper from AI-Archive for my current project"",
+    ""Help me get paper from the documents folder and filter by date range"",
+    ""Show me how to get paper programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-paper"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",submit_paper,Submit new research papers with type classification,"query1: Use AI-Archive to submit paper for my workflow
+query2: Search and submit paper matching the keyword 'machine learning'
+query3: Show me how to submit paper programmatically and schedule it weekly","submit-paper
+search-capability
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Submit new research papers with type classification."",
+  ""tool"": ""submit_paper"",
+  ""features"": [
+    ""submit paper efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""Use AI-Archive to submit paper for my workflow"",
+    ""Search and submit paper matching the keyword 'machine learning'"",
+    ""Show me how to submit paper programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""submit-paper"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",create_paper_version,Create new version of existing paper,"query1: Help me create paper version in AI-Archive with the following specifications
+query2: Execute create paper version with parameters from my configuration file
+query3: Show me how to create paper version programmatically and schedule it weekly","create-paper-version
+version-control
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Create new version of existing paper."",
+  ""tool"": ""create_paper_version"",
+  ""features"": [
+    ""create paper version efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline create paper version workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""Help me create paper version in AI-Archive with the following specifications"",
+    ""Execute create paper version with parameters from my configuration file"",
+    ""Show me how to create paper version programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""create-paper-version"",
+    ""version-control"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",get_user_papers,List your submitted papers with filters,"query1: I need to get user papers from AI-Archive for my current project
+query2: Execute get user papers with parameters from my configuration file
+query3: Show me how to get user papers programmatically and schedule it weekly","get-user-papers
+user-management
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""List your submitted papers with filters."",
+  ""tool"": ""get_user_papers"",
+  ""features"": [
+    ""get user papers efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get user papers workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""I need to get user papers from AI-Archive for my current project"",
+    ""Execute get user papers with parameters from my configuration file"",
+    ""Show me how to get user papers programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-user-papers"",
+    ""user-management"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",submit_review,Submit comprehensive peer reviews with 8-score system,"query1: Use AI-Archive to submit review for my workflow
+query2: Execute submit review with parameters from my configuration file
+query3: Automate submit review to run daily at 9 AM and save output to my dashboard","submit-review
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Submit comprehensive peer reviews with 8-score system."",
+  ""tool"": ""submit_review"",
+  ""features"": [
+    ""submit review efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline submit review workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""Use AI-Archive to submit review for my workflow"",
+    ""Execute submit review with parameters from my configuration file"",
+    ""Automate submit review to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""submit-review"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",get_reviews,List reviews with filtering options,"query1: I need to get reviews from AI-Archive for my current project
+query2: Execute get reviews with parameters from my configuration file
+query3: Automate get reviews to run daily at 9 AM and save output to my dashboard","get-reviews
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""List reviews with filtering options."",
+  ""tool"": ""get_reviews"",
+  ""features"": [
+    ""get reviews efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get reviews workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""I need to get reviews from AI-Archive for my current project"",
+    ""Execute get reviews with parameters from my configuration file"",
+    ""Automate get reviews to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-reviews"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",get_paper_reviews,Get all reviews for a specific paper,"query1: I need to get paper reviews from AI-Archive for my current project
+query2: Execute get paper reviews with parameters from my configuration file
+query3: Automate get paper reviews to run daily at 9 AM and save output to my dashboard","get-paper-reviews
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Get all reviews for a specific paper."",
+  ""tool"": ""get_paper_reviews"",
+  ""features"": [
+    ""get paper reviews efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get paper reviews workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""I need to get paper reviews from AI-Archive for my current project"",
+    ""Execute get paper reviews with parameters from my configuration file"",
+    ""Automate get paper reviews to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-paper-reviews"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+AI-Archive,https://www.pulsemcp.com/servers/ai-archive,"Integrates AI agents with AI Archive, a platform where they can publish or review scientific papers.",none,beta,"cursor
+claude_desktop
+VS_code",check_pending_reviews,Check for pending review requests before versioning,"query1: Use AI-Archive to check pending reviews for my workflow
+query2: Execute check pending reviews with parameters from my configuration file
+query3: Show me how to check pending reviews programmatically and schedule it weekly","check-pending-reviews
+version-control
+resource-orchestration","{
+  ""server_name"": ""AI-Archive"",
+  ""purpose"": ""Check for pending review requests before versioning."",
+  ""tool"": ""check_pending_reviews"",
+  ""features"": [
+    ""check pending reviews efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline check pending reviews workflows"",
+    ""integrate AI-Archive into automated processes"",
+    ""build custom solutions leveraging AI-Archive capabilities""
+  ],
+  ""examples"": [
+    ""Use AI-Archive to check pending reviews for my workflow"",
+    ""Execute check pending reviews with parameters from my configuration file"",
+    ""Show me how to check pending reviews programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""check-pending-reviews"",
+    ""version-control"",
+    ""resource-orchestration""
+  ]
+}"
+Amadeus,https://www.pulsemcp.com/servers/almogqwinz-amadeus,"Integrates with Amadeus travel API to search flight offers with comprehensive filtering by airports, dates, passengers, travel class, airlines, and pricing constraints for travel planning and booking workflows.",none,beta,"cursor
+claude_desktop",search_flight_offers,"Integrates with Amadeus travel API to search flight offers with comprehensive filtering by airports, dates, passengers, travel class, airlines, and pricing constraints for travel planning and booking workflows.","query1: I want to search flight offers that match my criteria in Amadeus
+query2: Search and search flight offers matching the keyword 'machine learning'
+query3: Integrate Amadeus to search flight offers and sync with my CRM system","search-flight-offers
+api-integration
+rest-api-access","{
+  ""server_name"": ""Amadeus"",
+  ""purpose"": ""Integrates with Amadeus travel API to search flight offers with comprehensive filtering by airports, dates, passengers, travel class, airlines, and pricing constraints for travel planning and booking workflows."",
+  ""tool"": ""search_flight_offers"",
+  ""features"": [
+    ""search flight offers efficiently"",
+    ""advanced search and filtering"",
+    ""seamless third-party integration""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications"",
+    ""integrate Amadeus API into custom applications""
+  ],
+  ""examples"": [
+    ""I want to search flight offers that match my criteria in Amadeus"",
+    ""Search and search flight offers matching the keyword 'machine learning'"",
+    ""Integrate Amadeus to search flight offers and sync with my CRM system""
+  ],
+  ""tags"": [
+    ""search-flight-offers"",
+    ""api-integration"",
+    ""rest-api-access""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",search,"Search for dashboards, charts, notebooks, experiments, and other content in Amplitude with comprehensive filtering and personalization options","query1: I want to search that match my criteria in Amplitude
+query2: Search and search matching the keyword 'machine learning'
+query3: Show me how to search programmatically and schedule it weekly","search
+search-capability
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Search for dashboards, charts, notebooks, experiments, and other content in Amplitude with comprehensive filtering and personalization options."",
+  ""tool"": ""search"",
+  ""features"": [
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search that match my criteria in Amplitude"",
+    ""Search and search matching the keyword 'machine learning'"",
+    ""Show me how to search programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",query_chart,Query chart data result using the internal dash API to get chart data,"query1: Use Amplitude to query chart for my workflow
+query2: Execute query chart operation on the dataset from last month
+query3: Show me how to query chart programmatically and schedule it weekly","query-chart
+data-management
+rest-api-access","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query chart data result using the internal dash API to get chart data."",
+  ""tool"": ""query_chart"",
+  ""features"": [
+    ""query chart efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines"",
+    ""integrate Amplitude API into custom applications""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query chart for my workflow"",
+    ""Execute query chart operation on the dataset from last month"",
+    ""Show me how to query chart programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-chart"",
+    ""data-management"",
+    ""rest-api-access""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",query_metric,Query metric data using the dataset endpoint with metric references,"query1: Use Amplitude to query metric for my workflow
+query2: Execute query metric operation on the dataset from last month
+query3: Show me how to query metric programmatically and schedule it weekly","query-metric
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query metric data using the dataset endpoint with metric references."",
+  ""tool"": ""query_metric"",
+  ""features"": [
+    ""query metric efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query metric for my workflow"",
+    ""Execute query metric operation on the dataset from last month"",
+    ""Show me how to query metric programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-metric"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",query_experiment,Query experiment analysis data using the dataset endpoint with proper experiment parameters,"query1: Use Amplitude to query experiment for my workflow
+query2: Execute query experiment operation on the dataset from last month
+query3: Show me how to query experiment programmatically and schedule it weekly","query-experiment
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query experiment analysis data using the dataset endpoint with proper experiment parameters."",
+  ""tool"": ""query_experiment"",
+  ""features"": [
+    ""query experiment efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query experiment for my workflow"",
+    ""Execute query experiment operation on the dataset from last month"",
+    ""Show me how to query experiment programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-experiment"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",query_dataset,Execute a data query using the dataset endpoint for complex ad-hoc analysis within a project,"query1: Use Amplitude to query dataset for my workflow
+query2: Can you query dataset for project ID abc-123 and show me the status?
+query3: Show me how to query dataset programmatically and schedule it weekly","query-dataset
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Execute a data query using the dataset endpoint for complex ad-hoc analysis within a project."",
+  ""tool"": ""query_dataset"",
+  ""features"": [
+    ""query dataset efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query dataset for my workflow"",
+    ""Can you query dataset for project ID abc-123 and show me the status?"",
+    ""Show me how to query dataset programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-dataset"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_dashboard,Get specific dashboards and all their charts including chart IDs for individual queries,"query1: I need to get dashboard from Amplitude for my current project
+query2: Execute get dashboard with parameters from my configuration file
+query3: Automate get dashboard to run daily at 9 AM and save output to my dashboard","get-dashboard
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get specific dashboards and all their charts including chart IDs for individual queries."",
+  ""tool"": ""get_dashboard"",
+  ""features"": [
+    ""get dashboard efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get dashboard workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get dashboard from Amplitude for my current project"",
+    ""Execute get dashboard with parameters from my configuration file"",
+    ""Automate get dashboard to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-dashboard"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_notebook,Get specific notebooks and all their charts including chart IDs for individual queries,"query1: I need to get notebook from Amplitude for my current project
+query2: Execute get notebook with parameters from my configuration file
+query3: Automate get notebook to run daily at 9 AM and save output to my dashboard","get-notebook
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get specific notebooks and all their charts including chart IDs for individual queries."",
+  ""tool"": ""get_notebook"",
+  ""features"": [
+    ""get notebook efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get notebook workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get notebook from Amplitude for my current project"",
+    ""Execute get notebook with parameters from my configuration file"",
+    ""Automate get notebook to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-notebook"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_flags,"Retrieve feature flags from a project with optional filtering by deployment, type, and deleted status","query1: I need to get flags from Amplitude for my current project
+query2: Can you get flags for project ID abc-123 and show me the status?
+query3: Automate get flags to run daily at 9 AM and save output to my dashboard","get-flags
+deployment-automation
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve feature flags from a project with optional filtering by deployment, type, and deleted status."",
+  ""tool"": ""get_flags"",
+  ""features"": [
+    ""get flags efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate deployment and build processes""
+  ],
+  ""examples"": [
+    ""I need to get flags from Amplitude for my current project"",
+    ""Can you get flags for project ID abc-123 and show me the status?"",
+    ""Automate get flags to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-flags"",
+    ""deployment-automation"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_experiments,Retrieve specific experiments by their IDs with additional information like state and decisions,"query1: I need to get experiments from Amplitude for my current project
+query2: Execute get experiments with parameters from my configuration file
+query3: Automate get experiments to run daily at 9 AM and save output to my dashboard","get-experiments
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve specific experiments by their IDs with additional information like state and decisions."",
+  ""tool"": ""get_experiments"",
+  ""features"": [
+    ""get experiments efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get experiments workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get experiments from Amplitude for my current project"",
+    ""Execute get experiments with parameters from my configuration file"",
+    ""Automate get experiments to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-experiments"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_context,"Get context information about the current user, organization, and accessible projects","query1: I need to get context from Amplitude for my current project
+query2: Can you get context for project ID abc-123 and show me the status?
+query3: Show me how to get context programmatically and schedule it weekly","get-context
+user-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get context information about the current user, organization, and accessible projects."",
+  ""tool"": ""get_context"",
+  ""features"": [
+    ""get context efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate user and team management in Amplitude""
+  ],
+  ""examples"": [
+    ""I need to get context from Amplitude for my current project"",
+    ""Can you get context for project ID abc-123 and show me the status?"",
+    ""Show me how to get context programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-context"",
+    ""user-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_deployments,	Retrieve all deployments (Experiment API keys) for the current project,"query1: I need to get deployments from Amplitude for my current project
+query2: Can you get deployments for project ID abc-123 and show me the status?
+query3: Integrate Amplitude to get deployments and sync with my CRM system","get-deployments
+api-integration
+rest-api-access","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve all deployments (Experiment API keys) for the current project."",
+  ""tool"": ""get_deployments"",
+  ""features"": [
+    ""get deployments efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate deployment and build processes"",
+    ""integrate Amplitude API into custom applications""
+  ],
+  ""examples"": [
+    ""I need to get deployments from Amplitude for my current project"",
+    ""Can you get deployments for project ID abc-123 and show me the status?"",
+    ""Integrate Amplitude to get deployments and sync with my CRM system""
+  ],
+  ""tags"": [
+    ""get-deployments"",
+    ""api-integration"",
+    ""rest-api-access""
+  ]
+}"
+Amplitude,https://www.pulsemcp.com/servers/amplitude,"Integrates with Amplitude analytics platform to provide direct access to product data, experiments, user behavior metrics, dashboards, and feature flags through natural language queries while maintaining existing user permissions and access controls.",oauth,beta,"cursor
+claude_desktop
+ChatGPT",get_metrics,List all metrics from a project with optional filtering and sorting by various criteria,"query1: I need to get metrics from Amplitude for my current project
+query2: Can you get metrics for project ID abc-123 and show me the status?
+query3: Show me how to get metrics programmatically and schedule it weekly","get-metrics
+project-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""List all metrics from a project with optional filtering and sorting by various criteria."",
+  ""tool"": ""get_metrics"",
+  ""features"": [
+    ""get metrics efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically""
+  ],
+  ""examples"": [
+    ""I need to get metrics from Amplitude for my current project"",
+    ""Can you get metrics for project ID abc-123 and show me the status?"",
+    ""Show me how to get metrics programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-metrics"",
+    ""project-management"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",load_h1b_data,"Download and load H-1B LCA data from the Department of Labor.
+
+Parameters:
+year: Fiscal year (default: 2024)
+quarter: Quarter 1-4 (default: 4)
+force_download: Force re-download even if cached","query1: Use H-1B Job Search to load h1b data for my workflow
+query2: Execute load h1b data operation on the dataset from last month
+query3: Show me how to load h1b data programmatically and schedule it weekly","load-h1b-data
+data-management
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""Download and load H-1B LCA data from the Department of Labor.\r\n\r\nParameters:\r\nyear: Fiscal year (default: 2024)\r\nquarter: Quarter 1-4 (default: 4)\r\nforce_download: Force re-download even if cached."",
+  ""tool"": ""load_h1b_data"",
+  ""features"": [
+    ""load h1b data efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate H-1B Job Search data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use H-1B Job Search to load h1b data for my workflow"",
+    ""Execute load h1b data operation on the dataset from last month"",
+    ""Show me how to load h1b data programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""load-h1b-data"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",search_h1b_jobs,"Search for H-1B sponsoring companies by job role and location.
+
+Parameters:
+job_role: Job title to search (e.g., ""Software Engineer"")
+city: Work city (optional)
+state: Work state code (optional, e.g., ""CA"")
+min_wage: Minimum wage filter (optional)
+max_results: Maximum results to return
+skip_agencies: Skip staffing agencies (default: true)","query1: I want to search h1b jobs that match my criteria in H-1B Job Search
+query2: Search and search h1b jobs matching the keyword 'machine learning'
+query3: Show me how to search h1b jobs programmatically and schedule it weekly","search-h1b-jobs
+search-capability
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""Search for H-1B sponsoring companies by job role and location.\r\n\r\nParameters:\r\njob_role: Job title to search (e.g., \""Software Engineer\"")\r\ncity: Work city (optional)\r\nstate: Work state code (optional, e.g., \""CA\"")\r\nmin_wage: Minimum wage filter (optional)\r\nmax_results: Maximum results to return\r\nskip_agencies: Skip staffing agencies (default: true)."",
+  ""tool"": ""search_h1b_jobs"",
+  ""features"": [
+    ""search h1b jobs efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search h1b jobs that match my criteria in H-1B Job Search"",
+    ""Search and search h1b jobs matching the keyword 'machine learning'"",
+    ""Show me how to search h1b jobs programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search-h1b-jobs"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",get_company_stats,"Get detailed H-1B sponsorship statistics for a specific company.
+
+Parameters:
+company_name: Company name to analyze","query1: I need to get company stats from H-1B Job Search for my current project
+query2: Execute get company stats with parameters from my configuration file
+query3: Show me how to get company stats programmatically and schedule it weekly","get-company-stats
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""Get detailed H-1B sponsorship statistics for a specific company.\r\n\r\nParameters:\r\ncompany_name: Company name to analyze."",
+  ""tool"": ""get_company_stats"",
+  ""features"": [
+    ""get company stats efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get company stats workflows"",
+    ""integrate H-1B Job Search into automated processes"",
+    ""build custom solutions leveraging H-1B Job Search capabilities""
+  ],
+  ""examples"": [
+    ""I need to get company stats from H-1B Job Search for my current project"",
+    ""Execute get company stats with parameters from my configuration file"",
+    ""Show me how to get company stats programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-company-stats"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",get_top_sponsors,"List top H-1B sponsoring companies by application volume.
+
+Parameters:
+limit: Number of companies to return
+exclude_agencies: Exclude staffing agencies","query1: I need to get top sponsors from H-1B Job Search for my current project
+query2: Execute get top sponsors with parameters from my configuration file
+query3: Automate get top sponsors to run daily at 9 AM and save output to my dashboard","get-top-sponsors
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""List top H-1B sponsoring companies by application volume.\n\nParameters:\nlimit: Number of companies to return\nexclude_agencies: Exclude staffing agencies."",
+  ""tool"": ""get_top_sponsors"",
+  ""features"": [
+    ""get top sponsors efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get top sponsors workflows"",
+    ""integrate H-1B Job Search into automated processes"",
+    ""build custom solutions leveraging H-1B Job Search capabilities""
+  ],
+  ""examples"": [
+    ""I need to get top sponsors from H-1B Job Search for my current project"",
+    ""Execute get top sponsors with parameters from my configuration file"",
+    ""Automate get top sponsors to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-top-sponsors"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",export_results,"Export filtered H-1B results to a CSV file.
+
+Parameters:
+job_role: Job title to filter
+city: City filter (optional)
+state: State filter (optional)
+filename: Output filename
+max_results: Maximum results to export","query1: Use H-1B Job Search to export results for my workflow
+query2: Help me export results from the documents folder and filter by date range
+query3: Show me how to export results programmatically and schedule it weekly","export-results
+file-operations
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""Export filtered H-1B results to a CSV file.\r\n\r\nParameters:\r\njob_role: Job title to filter\r\ncity: City filter (optional)\r\nstate: State filter (optional)\r\nfilename: Output filename\r\nmax_results: Maximum results to export."",
+  ""tool"": ""export_results"",
+  ""features"": [
+    ""export results efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline export results workflows"",
+    ""integrate H-1B Job Search into automated processes"",
+    ""build custom solutions leveraging H-1B Job Search capabilities""
+  ],
+  ""examples"": [
+    ""Use H-1B Job Search to export results for my workflow"",
+    ""Help me export results from the documents folder and filter by date range"",
+    ""Show me how to export results programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""export-results"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+H-1B Job Search,https://www.pulsemcp.com/servers/aryaminus-h1b-job-search,"Provides direct access to U.S. Department of Labor H-1B LCA disclosure data for searching sponsoring companies by job role and location, analyzing company sponsorship statistics, and identifying visa sponsorship opportunities with intelligent filtering to exclude staffing agencies.",none,beta,"cursor
+claude_desktop
+ChatGPT",get_available_data,Check available LCA data periods and cached files.,"query1: I need to get available data from H-1B Job Search for my current project
+query2: Help me get available data from the documents folder and filter by date range
+query3: Show me how to get available data programmatically and schedule it weekly","get-available-data
+data-management
+resource-orchestration","{
+  ""server_name"": ""H-1B Job Search"",
+  ""purpose"": ""Check available LCA data periods and cached files."",
+  ""tool"": ""get_available_data"",
+  ""features"": [
+    ""get available data efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate H-1B Job Search data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""I need to get available data from H-1B Job Search for my current project"",
+    ""Help me get available data from the documents folder and filter by date range"",
+    ""Show me how to get available data programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-available-data"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",search_markets,Search Polymarket prediction markets with advanced filtering:,"query1: I want to search markets that match my criteria in Polymarket
+query2: Search and search markets matching the keyword 'machine learning'
+query3: Show me how to search markets programmatically and schedule it weekly","search-markets
+search-capability
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Search Polymarket prediction markets with advanced filtering:."",
+  ""tool"": ""search_markets"",
+  ""features"": [
+    ""search markets efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search markets that match my criteria in Polymarket"",
+    ""Search and search markets matching the keyword 'machine learning'"",
+    ""Show me how to search markets programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search-markets"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",get_market,"Get detailed information about a specific market by slug:
+
+Current probabilities for all outcomes
+Volume (24h and total), liquidity
+Market status and end date
+Full market metadata","query1: I need to get market from Polymarket for my current project
+query2: Execute get market operation on the dataset from last month
+query3: Show me how to get market programmatically and schedule it weekly","get-market
+data-management
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Get detailed information about a specific market by slug:\r\n\r\nCurrent probabilities for all outcomes\r\nVolume (24h and total), liquidity\r\nMarket status and end date\r\nFull market metadata."",
+  ""tool"": ""get_market"",
+  ""features"": [
+    ""get market efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate Polymarket data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""I need to get market from Polymarket for my current project"",
+    ""Execute get market operation on the dataset from last month"",
+    ""Show me how to get market programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-market"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",search_events,"Search Polymarket events (collections of related markets):
+
+Filter by tags, featured status, closed status
+See all markets within an event
+Event-level volume and liquidity","query1: I want to search events that match my criteria in Polymarket
+query2: Search and search events matching the keyword 'machine learning'
+query3: Show me how to search events programmatically and schedule it weekly","search-events
+search-capability
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Search Polymarket events (collections of related markets):\r\n\r\nFilter by tags, featured status, closed status\r\nSee all markets within an event\r\nEvent-level volume and liquidity."",
+  ""tool"": ""search_events"",
+  ""features"": [
+    ""search events efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search events that match my criteria in Polymarket"",
+    ""Search and search events matching the keyword 'machine learning'"",
+    ""Show me how to search events programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search-events"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",get_event,"Get detailed information about a specific event:
+
+All markets within the event
+Event-level statistics
+Market probabilities and slugs","query1: I need to get event from Polymarket for my current project
+query2: Execute get event with parameters from my configuration file
+query3: Show me how to get event programmatically and schedule it weekly","get-event
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Get detailed information about a specific event:\r\n\r\nAll markets within the event\r\nEvent-level statistics\r\nMarket probabilities and slugs."",
+  ""tool"": ""get_event"",
+  ""features"": [
+    ""get event efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get event workflows"",
+    ""integrate Polymarket into automated processes"",
+    ""build custom solutions leveraging Polymarket capabilities""
+  ],
+  ""examples"": [
+    ""I need to get event from Polymarket for my current project"",
+    ""Execute get event with parameters from my configuration file"",
+    ""Show me how to get event programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-event"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",get_trades,"Get recent trade activity from Data API:
+
+Filter by market, event, or trade side (BUY/SELL)
+Analyze trading patterns
+View buy/sell ratio and volume","query1: I need to get trades from Polymarket for my current project
+query2: Execute get trades operation on the dataset from last month
+query3: Show me how to get trades programmatically and schedule it weekly","get-trades
+data-management
+rest-api-access","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Get recent trade activity from Data API:\r\n\r\nFilter by market, event, or trade side (BUY/SELL)\r\nAnalyze trading patterns\r\nView buy/sell ratio and volume."",
+  ""tool"": ""get_trades"",
+  ""features"": [
+    ""get trades efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate Polymarket data into analytics pipelines"",
+    ""integrate Polymarket API into custom applications""
+  ],
+  ""examples"": [
+    ""I need to get trades from Polymarket for my current project"",
+    ""Execute get trades operation on the dataset from last month"",
+    ""Show me how to get trades programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-trades"",
+    ""data-management"",
+    ""rest-api-access""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",list_tags,"List all available tags/categories:
+
+Discover market categories (Politics, Sports, Crypto, etc.)
+Get tag IDs for filtering
+Browse market taxonomy","query1: Show me all tags available in my Polymarket account
+query2: Execute list tags with parameters from my configuration file
+query3: Show me how to list tags programmatically and schedule it weekly","list-tags
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""List all available tags/categories:\r\n\r\nDiscover market categories (Politics, Sports, Crypto, etc.)\r\nGet tag IDs for filtering\r\nBrowse market taxonomy."",
+  ""tool"": ""list_tags"",
+  ""features"": [
+    ""list tags efficiently""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""Show me all tags available in my Polymarket account"",
+    ""Execute list tags with parameters from my configuration file"",
+    ""Show me how to list tags programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""list-tags"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+Polymarket,https://www.pulsemcp.com/servers/aryankeluskar-polymarket,"Real-time Polymarket prediction market data with 7 tools for market discovery, event analysis, and probability tracking",none,beta,"cursor
+claude_desktop",analyze_market,"Comprehensive market analysis combining multiple data sources:
+
+Probability analysis with sentiment indicators
+Market health scoring (liquidity & activity levels)
+Optional trade data integration
+AI-friendly insights for decision-making","query1: Analyze the market data using Polymarket and provide insights
+query2: Execute analyze market operation on the dataset from last month
+query3: Show me how to analyze market programmatically and schedule it weekly","analyze-market
+data-management
+resource-orchestration","{
+  ""server_name"": ""Polymarket"",
+  ""purpose"": ""Comprehensive market analysis combining multiple data sources:\r\n\r\nProbability analysis with sentiment indicators\r\nMarket health scoring (liquidity & activity levels)\r\nOptional trade data integration\r\nAI-friendly insights for decision-making."",
+  ""tool"": ""analyze_market"",
+  ""features"": [
+    ""analyze market efficiently"",
+    ""seamless third-party integration""
+  ],
+  ""use_cases"": [
+    ""integrate Polymarket data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Analyze the market data using Polymarket and provide insights"",
+    ""Execute analyze market operation on the dataset from last month"",
+    ""Show me how to analyze market programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""analyze-market"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+Helm,https://www.pulsemcp.com/servers/zekker6-helm,Provides tools for interacting with Helm repositories and charts,none,beta,"cursor
+claude_desktop",list_repository_charts,Lists all charts available in a Helm repository,"query1: Show me all repository charts available in my Helm account
+query2: Execute list repository charts with parameters from my configuration file
+query3: Show me how to list repository charts programmatically and schedule it weekly","list-repository-charts
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""Helm"",
+  ""purpose"": ""Lists all charts available in a Helm repository."",
+  ""tool"": ""list_repository_charts"",
+  ""features"": [
+    ""list repository charts efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline list repository charts workflows"",
+    ""integrate Helm into automated processes"",
+    ""build custom solutions leveraging Helm capabilities""
+  ],
+  ""examples"": [
+    ""Show me all repository charts available in my Helm account"",
+    ""Execute list repository charts with parameters from my configuration file"",
+    ""Show me how to list repository charts programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""list-repository-charts"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+Helm,https://www.pulsemcp.com/servers/zekker6-helm,Provides tools for interacting with Helm repositories and charts,none,beta,"cursor
+claude_desktop",get_latest_version_of_chart, Retrieves the latest version of a specific chart,"query1: I need to get latest version of chart from Helm for my current project
+query2: Execute get latest version of chart with parameters from my configuration file
+query3: Show me how to get latest version of chart programmatically and schedule it weekly","get-latest-version-of-chart
+testing-framework
+resource-orchestration","{
+  ""server_name"": ""Helm"",
+  ""purpose"": ""Retrieves the latest version of a specific chart."",
+  ""tool"": ""get_latest_version_of_chart"",
+  ""features"": [
+    ""get latest version of chart efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get latest version of chart workflows"",
+    ""integrate Helm into automated processes"",
+    ""build custom solutions leveraging Helm capabilities""
+  ],
+  ""examples"": [
+    ""I need to get latest version of chart from Helm for my current project"",
+    ""Execute get latest version of chart with parameters from my configuration file"",
+    ""Show me how to get latest version of chart programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-latest-version-of-chart"",
+    ""testing-framework"",
+    ""resource-orchestration""
+  ]
+}"
+Helm,https://www.pulsemcp.com/servers/zekker6-helm,Provides tools for interacting with Helm repositories and charts,none,beta,"cursor
+claude_desktop",get_chart_values, Retrieves the values file for a chart (latest version or specific version),"query1: I need to get chart values from Helm for my current project
+query2: Help me get chart values from the documents folder and filter by date range
+query3: Show me how to get chart values programmatically and schedule it weekly","get-chart-values
+file-operations
+resource-orchestration","{
+  ""server_name"": ""Helm"",
+  ""purpose"": ""Retrieves the values file for a chart (latest version or specific version)."",
+  ""tool"": ""get_chart_values"",
+  ""features"": [
+    ""get chart values efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get chart values workflows"",
+    ""integrate Helm into automated processes"",
+    ""build custom solutions leveraging Helm capabilities""
+  ],
+  ""examples"": [
+    ""I need to get chart values from Helm for my current project"",
+    ""Help me get chart values from the documents folder and filter by date range"",
+    ""Show me how to get chart values programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-chart-values"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Helm,https://www.pulsemcp.com/servers/zekker6-helm,Provides tools for interacting with Helm repositories and charts,none,beta,"cursor
+claude_desktop",get_chart_contents," Retrieves the contents of a chart (including templates, values, and metadata).","query1: I need to get chart contents from Helm for my current project
+query2: Execute get chart contents operation on the dataset from last month
+query3: Show me how to get chart contents programmatically and schedule it weekly","get-chart-contents
+data-management
+resource-orchestration","{
+  ""server_name"": ""Helm"",
+  ""purpose"": ""Retrieves the contents of a chart (including templates, values, and metadata)."",
+  ""tool"": ""get_chart_contents"",
+  ""features"": [
+    ""get chart contents efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate Helm data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""I need to get chart contents from Helm for my current project"",
+    ""Execute get chart contents operation on the dataset from last month"",
+    ""Show me how to get chart contents programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-chart-contents"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+Helm,https://www.pulsemcp.com/servers/zekker6-helm,Provides tools for interacting with Helm repositories and charts,none,beta,"cursor
+claude_desktop",get_chart_dependencies, Retrieves the dependencies of a chart as defined in its Chart.yaml file.,"query1: I need to get chart dependencies from Helm for my current project
+query2: Help me get chart dependencies from the documents folder and filter by date range
+query3: Show me how to get chart dependencies programmatically and schedule it weekly","get-chart-dependencies
+file-operations
+resource-orchestration","{
+  ""server_name"": ""Helm"",
+  ""purpose"": ""Retrieves the dependencies of a chart as defined in its Chart.yaml file."",
+  ""tool"": ""get_chart_dependencies"",
+  ""features"": [
+    ""get chart dependencies efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get chart dependencies workflows"",
+    ""integrate Helm into automated processes"",
+    ""build custom solutions leveraging Helm capabilities""
+  ],
+  ""examples"": [
+    ""I need to get chart dependencies from Helm for my current project"",
+    ""Help me get chart dependencies from the documents folder and filter by date range"",
+    ""Show me how to get chart dependencies programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-chart-dependencies"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",get_design_context,"Use the MCP server to get the design context for a layer or your selection in Figma. By default, the output is React + Tailwind, but you can customize it through your prompt.","query1: I need to get design context from Figma for my current project
+query2: Execute get design context with parameters from my configuration file
+query3: Show me how to get design context programmatically and schedule it weekly","get-design-context
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""Use the MCP server to get the design context for a layer or your selection in Figma. By default, the output is React + Tailwind, but you can customize it through your prompt."",
+  ""tool"": ""get_design_context"",
+  ""features"": [
+    ""get design context efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get design context workflows"",
+    ""integrate Figma into automated processes"",
+    ""build custom solutions leveraging Figma capabilities""
+  ],
+  ""examples"": [
+    ""I need to get design context from Figma for my current project"",
+    ""Execute get design context with parameters from my configuration file"",
+    ""Show me how to get design context programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-design-context"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",get_variable_defs,"Returns the variables and styles used in your Figma selection (such as colors, spacing, typography).","query1: I need to get variable defs from Figma for my current project
+query2: Execute get variable defs with parameters from my configuration file
+query3: Automate get variable defs to run daily at 9 AM and save output to my dashboard","get-variable-defs
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""Returns the variables and styles used in your Figma selection (such as colors, spacing, typography)."",
+  ""tool"": ""get_variable_defs"",
+  ""features"": [
+    ""get variable defs efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get variable defs workflows"",
+    ""integrate Figma into automated processes"",
+    ""build custom solutions leveraging Figma capabilities""
+  ],
+  ""examples"": [
+    ""I need to get variable defs from Figma for my current project"",
+    ""Execute get variable defs with parameters from my configuration file"",
+    ""Automate get variable defs to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-variable-defs"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",get_code_connect_map,"Retrieves a mapping between Figma node IDs and their corresponding code components in your codebase. Specifically, it returns an object where each key is a Figma node ID, and the value contains:
+
+codeConnectSrc: The location of the component in your codebase (e.g., a file path or URL).
+codeConnectName: The name of the component in your codebase.
+This mapping is used to connect Figma design elements directly to their React (or other framework) implementations, enabling seamless design-to-code workflows and ensuring that the correct components are used for each part of the design. If a Figma node is connected to a code component, this function helps you identify and use the exact component in your project.","query1: I need to get code connect map from Figma for my current project
+query2: Can you get code connect map for project ID abc-123 and show me the status?
+query3: Show me how to get code connect map programmatically and schedule it weekly","get-code-connect-map
+file-operations
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""Retrieves a mapping between Figma node IDs and their corresponding code components in your codebase. Specifically, it returns an object where each key is a Figma node ID, and the value contains:\r\n\r\ncodeConnectSrc: The location of the component in your codebase (e.g., a file path or URL).\r\ncodeConnectName: The name of the component in your codebase.\r\nThis mapping is used to connect Figma design elements directly to their React (or other framework) implementations, enabling seamless design-to-code workflows and ensuring that the correct components are used for each part of the design. If a Figma node is connected to a code component, this function helps you identify and use the exact component in your project."",
+  ""tool"": ""get_code_connect_map"",
+  ""features"": [
+    ""get code connect map efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Figma projects and workspaces programmatically""
+  ],
+  ""examples"": [
+    ""I need to get code connect map from Figma for my current project"",
+    ""Can you get code connect map for project ID abc-123 and show me the status?"",
+    ""Show me how to get code connect map programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-code-connect-map"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",get_screenshot,Allows the agent to take a screenshot of your selection. This helps preserve layout fidelity in the generated code. Recommended to keep on (only turn off if you're concerned about token limits).,"query1: I need to get screenshot from Figma for my current project
+query2: Execute get screenshot with parameters from my configuration file
+query3: Automate get screenshot to run daily at 9 AM and save output to my dashboard","get-screenshot
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""Allows the agent to take a screenshot of your selection. This helps preserve layout fidelity in the generated code. Recommended to keep on (only turn off if you're concerned about token limits)."",
+  ""tool"": ""get_screenshot"",
+  ""features"": [
+    ""get screenshot efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get screenshot workflows"",
+    ""integrate Figma into automated processes"",
+    ""build custom solutions leveraging Figma capabilities""
+  ],
+  ""examples"": [
+    ""I need to get screenshot from Figma for my current project"",
+    ""Execute get screenshot with parameters from my configuration file"",
+    ""Automate get screenshot to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-screenshot"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",create_design_system_rules,"A tool for creating a rule file that provide agents with the right context to translate designs into high-quality, codebase-aware frontend code. It helps ensure alignment with your design system and tech stack, improving the relevance and accuracy of generated output.
+
+Run this tool and make sure the result is saved to the correct rules/ or instructions/ path so your agent can access it during code generation.","query1: Help me create design system rules in Figma with the following specifications
+query2: Help me create design system rules from the documents folder and filter by date range
+query3: Show me how to create design system rules programmatically and schedule it weekly","create-design-system-rules
+file-operations
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""A tool for creating a rule file that provide agents with the right context to translate designs into high-quality, codebase-aware frontend code. It helps ensure alignment with your design system and tech stack, improving the relevance and accuracy of generated output.\r\n\r\nRun this tool and make sure the result is saved to the correct rules/ or instructions/ path so your agent can access it during code generation."",
+  ""tool"": ""create_design_system_rules"",
+  ""features"": [
+    ""create design system rules efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline create design system rules workflows"",
+    ""integrate Figma into automated processes"",
+    ""build custom solutions leveraging Figma capabilities""
+  ],
+  ""examples"": [
+    ""Help me create design system rules in Figma with the following specifications"",
+    ""Help me create design system rules from the documents folder and filter by date range"",
+    ""Show me how to create design system rules programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""create-design-system-rules"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",get_figjam,"This tool returns metadata for FigJam diagrams in XML format, similar to get_metadata. In addition to returning basic properties like layer IDs, names, types, positions, and sizes, it also includes screenshots of the nodes.","query1: I need to get figjam from Figma for my current project
+query2: Execute get figjam operation on the dataset from last month
+query3: Show me how to get figjam programmatically and schedule it weekly","get-figjam
+data-management
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""This tool returns metadata for FigJam diagrams in XML format, similar to get_metadata. In addition to returning basic properties like layer IDs, names, types, positions, and sizes, it also includes screenshots of the nodes."",
+  ""tool"": ""get_figjam"",
+  ""features"": [
+    ""get figjam efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate Figma data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""I need to get figjam from Figma for my current project"",
+    ""Execute get figjam operation on the dataset from last month"",
+    ""Show me how to get figjam programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-figjam"",
+    ""data-management"",
+    ""resource-orchestration""
+  ]
+}"
+Figma,https://www.pulsemcp.com/servers/figma-dev-mode,"Integrates with Figma's desktop app to extract design information, variables, and component data from selected frames for generating code that maintains design-to-code fidelity.",none,stable,"cursor
+claude_desktop
+ChatGPT",whoami,"This tool returns the identity of the user that's authenticated to Figma, including:
+
+The user's email address
+All of the plans the user belongs to
+The seat type the user has on each plan","query1: Use Figma to whoami for my workflow
+query2: I want to whoami for user john@example.com with admin privileges
+query3: Show me how to whoami programmatically and schedule it weekly","whoami
+email-services
+resource-orchestration","{
+  ""server_name"": ""Figma"",
+  ""purpose"": ""This tool returns the identity of the user that's authenticated to Figma, including:\r\n\r\nThe user's email address\r\nAll of the plans the user belongs to\r\nThe seat type the user has on each plan."",
+  ""tool"": ""whoami"",
+  ""features"": [
+    ""secure authentication and authorization""
+  ],
+  ""use_cases"": [
+    ""automate user and team management in Figma""
+  ],
+  ""examples"": [
+    ""Use Figma to whoami for my workflow"",
+    ""I want to whoami for user john@example.com with admin privileges"",
+    ""Show me how to whoami programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""whoami"",
+    ""email-services"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",search,"Search for dashboards, charts, notebooks, experiments, and other content in Amplitude with comprehensive filtering and personalization options","query1: I want to search that match my criteria in Amplitude
+query2: Search and search matching the keyword 'machine learning'
+query3: Show me how to search programmatically and schedule it weekly","search
+search-capability
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Search for dashboards, charts, notebooks, experiments, and other content in Amplitude with comprehensive filtering and personalization options."",
+  ""tool"": ""search"",
+  ""features"": [
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I want to search that match my criteria in Amplitude"",
+    ""Search and search matching the keyword 'machine learning'"",
+    ""Show me how to search programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""search"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",query_chart,Query chart data result using the internal dash API to get chart data,"query1: Use Amplitude to query chart for my workflow
+query2: Execute query chart operation on the dataset from last month
+query3: Show me how to query chart programmatically and schedule it weekly","query-chart
+data-management
+rest-api-access","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query chart data result using the internal dash API to get chart data."",
+  ""tool"": ""query_chart"",
+  ""features"": [
+    ""query chart efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines"",
+    ""integrate Amplitude API into custom applications""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query chart for my workflow"",
+    ""Execute query chart operation on the dataset from last month"",
+    ""Show me how to query chart programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-chart"",
+    ""data-management"",
+    ""rest-api-access""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",query_metric,Query metric data using the dataset endpoint with metric references,"query1: Use Amplitude to query metric for my workflow
+query2: Execute query metric operation on the dataset from last month
+query3: Show me how to query metric programmatically and schedule it weekly","query-metric
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query metric data using the dataset endpoint with metric references."",
+  ""tool"": ""query_metric"",
+  ""features"": [
+    ""query metric efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query metric for my workflow"",
+    ""Execute query metric operation on the dataset from last month"",
+    ""Show me how to query metric programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-metric"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",query_experiment,Query experiment analysis data using the dataset endpoint with proper experiment parameters,"query1: Use Amplitude to query experiment for my workflow
+query2: Execute query experiment operation on the dataset from last month
+query3: Show me how to query experiment programmatically and schedule it weekly","query-experiment
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Query experiment analysis data using the dataset endpoint with proper experiment parameters."",
+  ""tool"": ""query_experiment"",
+  ""features"": [
+    ""query experiment efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query experiment for my workflow"",
+    ""Execute query experiment operation on the dataset from last month"",
+    ""Show me how to query experiment programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-experiment"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",query_dataset,Execute a data query using the dataset endpoint for complex ad-hoc analysis within a project,"query1: Use Amplitude to query dataset for my workflow
+query2: Can you query dataset for project ID abc-123 and show me the status?
+query3: Show me how to query dataset programmatically and schedule it weekly","query-dataset
+data-management
+query-execution","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Execute a data query using the dataset endpoint for complex ad-hoc analysis within a project."",
+  ""tool"": ""query_dataset"",
+  ""features"": [
+    ""query dataset efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""integrate Amplitude data into analytics pipelines""
+  ],
+  ""examples"": [
+    ""Use Amplitude to query dataset for my workflow"",
+    ""Can you query dataset for project ID abc-123 and show me the status?"",
+    ""Show me how to query dataset programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""query-dataset"",
+    ""data-management"",
+    ""query-execution""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_context,"Get context information about the current user, organization, and accessible projects","query1: I need to get context from Amplitude for my current project
+query2: Can you get context for project ID abc-123 and show me the status?
+query3: Show me how to get context programmatically and schedule it weekly","get-context
+user-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get context information about the current user, organization, and accessible projects."",
+  ""tool"": ""get_context"",
+  ""features"": [
+    ""get context efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate user and team management in Amplitude""
+  ],
+  ""examples"": [
+    ""I need to get context from Amplitude for my current project"",
+    ""Can you get context for project ID abc-123 and show me the status?"",
+    ""Show me how to get context programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-context"",
+    ""user-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_charts,Retrieve full chart objects by their IDs using the chart service directly,"query1: I need to get charts from Amplitude for my current project
+query2: Execute get charts with parameters from my configuration file
+query3: Automate get charts to run daily at 9 AM and save output to my dashboard","get-charts
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve full chart objects by their IDs using the chart service directly."",
+  ""tool"": ""get_charts"",
+  ""features"": [
+    ""get charts efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get charts workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get charts from Amplitude for my current project"",
+    ""Execute get charts with parameters from my configuration file"",
+    ""Automate get charts to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-charts"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_dashboard,Get specific dashboards and all their charts including chart IDs for individual queries,"query1: I need to get dashboard from Amplitude for my current project
+query2: Execute get dashboard with parameters from my configuration file
+query3: Automate get dashboard to run daily at 9 AM and save output to my dashboard","get-dashboard
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get specific dashboards and all their charts including chart IDs for individual queries."",
+  ""tool"": ""get_dashboard"",
+  ""features"": [
+    ""get dashboard efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get dashboard workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get dashboard from Amplitude for my current project"",
+    ""Execute get dashboard with parameters from my configuration file"",
+    ""Automate get dashboard to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-dashboard"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_notebook,Get specific notebooks and all their charts including chart IDs for individual queries,"query1: I need to get notebook from Amplitude for my current project
+query2: Execute get notebook with parameters from my configuration file
+query3: Automate get notebook to run daily at 9 AM and save output to my dashboard","get-notebook
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get specific notebooks and all their charts including chart IDs for individual queries."",
+  ""tool"": ""get_notebook"",
+  ""features"": [
+    ""get notebook efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get notebook workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get notebook from Amplitude for my current project"",
+    ""Execute get notebook with parameters from my configuration file"",
+    ""Automate get notebook to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-notebook"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_flags,"Retrieve feature flags from a project with optional filtering by deployment, type, and deleted status","query1: I need to get flags from Amplitude for my current project
+query2: Can you get flags for project ID abc-123 and show me the status?
+query3: Automate get flags to run daily at 9 AM and save output to my dashboard","get-flags
+deployment-automation
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve feature flags from a project with optional filtering by deployment, type, and deleted status."",
+  ""tool"": ""get_flags"",
+  ""features"": [
+    ""get flags efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate deployment and build processes""
+  ],
+  ""examples"": [
+    ""I need to get flags from Amplitude for my current project"",
+    ""Can you get flags for project ID abc-123 and show me the status?"",
+    ""Automate get flags to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-flags"",
+    ""deployment-automation"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_experiments,Retrieve specific experiments by their IDs with additional information like state and decisions,"query1: I need to get experiments from Amplitude for my current project
+query2: Execute get experiments with parameters from my configuration file
+query3: Automate get experiments to run daily at 9 AM and save output to my dashboard","get-experiments
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve specific experiments by their IDs with additional information like state and decisions."",
+  ""tool"": ""get_experiments"",
+  ""features"": [
+    ""get experiments efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get experiments workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get experiments from Amplitude for my current project"",
+    ""Execute get experiments with parameters from my configuration file"",
+    ""Automate get experiments to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-experiments"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_deployments,Retrieve all deployments (Experiment API keys) for the current project,"query1: I need to get deployments from Amplitude for my current project
+query2: Can you get deployments for project ID abc-123 and show me the status?
+query3: Integrate Amplitude to get deployments and sync with my CRM system","get-deployments
+api-integration
+rest-api-access","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve all deployments (Experiment API keys) for the current project."",
+  ""tool"": ""get_deployments"",
+  ""features"": [
+    ""get deployments efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate deployment and build processes"",
+    ""integrate Amplitude API into custom applications""
+  ],
+  ""examples"": [
+    ""I need to get deployments from Amplitude for my current project"",
+    ""Can you get deployments for project ID abc-123 and show me the status?"",
+    ""Integrate Amplitude to get deployments and sync with my CRM system""
+  ],
+  ""tags"": [
+    ""get-deployments"",
+    ""api-integration"",
+    ""rest-api-access""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_metrics,List all metrics from a project with optional filtering and sorting by various criteria,"query1: I need to get metrics from Amplitude for my current project
+query2: Can you get metrics for project ID abc-123 and show me the status?
+query3: Show me how to get metrics programmatically and schedule it weekly","get-metrics
+project-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""List all metrics from a project with optional filtering and sorting by various criteria."",
+  ""tool"": ""get_metrics"",
+  ""features"": [
+    ""get metrics efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically""
+  ],
+  ""examples"": [
+    ""I need to get metrics from Amplitude for my current project"",
+    ""Can you get metrics for project ID abc-123 and show me the status?"",
+    ""Show me how to get metrics programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-metrics"",
+    ""project-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_metric,Get detailed information about a specific metric by ID,"query1: I need to get metric from Amplitude for my current project
+query2: Execute get metric with parameters from my configuration file
+query3: Show me how to get metric programmatically and schedule it weekly","get-metric
+ai-powered
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Get detailed information about a specific metric by ID."",
+  ""tool"": ""get_metric"",
+  ""features"": [
+    ""get metric efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get metric workflows"",
+    ""integrate Amplitude into automated processes"",
+    ""build custom solutions leveraging Amplitude capabilities""
+  ],
+  ""examples"": [
+    ""I need to get metric from Amplitude for my current project"",
+    ""Execute get metric with parameters from my configuration file"",
+    ""Show me how to get metric programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-metric"",
+    ""ai-powered"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_events,Retrieve events from a project with optional filtering and sorting,"query1: I need to get events from Amplitude for my current project
+query2: Can you get events for project ID abc-123 and show me the status?
+query3: Show me how to get events programmatically and schedule it weekly","get-events
+project-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve events from a project with optional filtering and sorting."",
+  ""tool"": ""get_events"",
+  ""features"": [
+    ""get events efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically""
+  ],
+  ""examples"": [
+    ""I need to get events from Amplitude for my current project"",
+    ""Can you get events for project ID abc-123 and show me the status?"",
+    ""Show me how to get events programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-events"",
+    ""project-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_event_properties,Retrieve event properties from a project with filtering options,"query1: I need to get event properties from Amplitude for my current project
+query2: Can you get event properties for project ID abc-123 and show me the status?
+query3: Show me how to get event properties programmatically and schedule it weekly","get-event-properties
+project-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve event properties from a project with filtering options."",
+  ""tool"": ""get_event_properties"",
+  ""features"": [
+    ""get event properties efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically""
+  ],
+  ""examples"": [
+    ""I need to get event properties from Amplitude for my current project"",
+    ""Can you get event properties for project ID abc-123 and show me the status?"",
+    ""Show me how to get event properties programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-event-properties"",
+    ""project-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_user_properties,Retrieve user properties from a project with filtering options,"query1: I need to get user properties from Amplitude for my current project
+query2: Can you get user properties for project ID abc-123 and show me the status?
+query3: Show me how to get user properties programmatically and schedule it weekly","get-user-properties
+user-management
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Retrieve user properties from a project with filtering options."",
+  ""tool"": ""get_user_properties"",
+  ""features"": [
+    ""get user properties efficiently""
+  ],
+  ""use_cases"": [
+    ""manage Amplitude projects and workspaces programmatically"",
+    ""automate user and team management in Amplitude""
+  ],
+  ""examples"": [
+    ""I need to get user properties from Amplitude for my current project"",
+    ""Can you get user properties for project ID abc-123 and show me the status?"",
+    ""Show me how to get user properties programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-user-properties"",
+    ""user-management"",
+    ""resource-orchestration""
+  ]
+}"
+Amplitude,https://amplitude.com/docs/analytics/amplitude-mcp,"The Amplitude Model Context Protocol (MCP) server enables teams to analyze product data, experiments, and user behavior using conversational AI. Query your Amplitude analytics, dashboards, experiments, and feature flags directly through AI interfaces using natural language.",none,stable,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_session_replays,"Search for session replays in the last 30 days, filtered by user properties or events.","query1: I need to get session replays from Amplitude for my current project
+query2: I want to get session replays for user john@example.com with admin privileges
+query3: Show me how to get session replays programmatically and schedule it weekly","get-session-replays
+search-capability
+resource-orchestration","{
+  ""server_name"": ""Amplitude"",
+  ""purpose"": ""Search for session replays in the last 30 days, filtered by user properties or events."",
+  ""tool"": ""get_session_replays"",
+  ""features"": [
+    ""get session replays efficiently"",
+    ""advanced search and filtering""
+  ],
+  ""use_cases"": [
+    ""automate user and team management in Amplitude"",
+    ""enable discovery and search functionality in applications""
+  ],
+  ""examples"": [
+    ""I need to get session replays from Amplitude for my current project"",
+    ""I want to get session replays for user john@example.com with admin privileges"",
+    ""Show me how to get session replays programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""get-session-replays"",
+    ""search-capability"",
+    ""resource-orchestration""
+  ]
+}"
+Semgrep,https://github.com/semgrep/mcp,"Sentry's MCP service is primarily designed for human-in-the-loop coding agents. Our tool selection and priorities are focused on developer workflows and debugging use cases, rather than providing a general-purpose MCP server for all Sentry functionality.
+
+This remote MCP server acts as middleware to the upstream Sentry API, optimized for coding assistants like Cursor, Claude Code, and similar development tools. It's based on Cloudflare's work towards remote MCPs.",none,beta,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",security_check,Scan code for security vulnerabilities,"query1: Use Semgrep to security check for my workflow
+query2: Execute security check with parameters from my configuration file
+query3: Show me how to security check programmatically and schedule it weekly","security-check
+security-operations
+resource-orchestration","{
+  ""server_name"": ""Semgrep"",
+  ""purpose"": ""Scan code for security vulnerabilities."",
+  ""tool"": ""security_check"",
+  ""features"": [
+    ""security check efficiently"",
+    ""secure authentication and authorization""
+  ],
+  ""use_cases"": [
+    ""streamline security check workflows"",
+    ""integrate Semgrep into automated processes"",
+    ""build custom solutions leveraging Semgrep capabilities""
+  ],
+  ""examples"": [
+    ""Use Semgrep to security check for my workflow"",
+    ""Execute security check with parameters from my configuration file"",
+    ""Show me how to security check programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""security-check"",
+    ""security-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Semgrep,https://github.com/semgrep/mcp,"Sentry's MCP service is primarily designed for human-in-the-loop coding agents. Our tool selection and priorities are focused on developer workflows and debugging use cases, rather than providing a general-purpose MCP server for all Sentry functionality.
+
+This remote MCP server acts as middleware to the upstream Sentry API, optimized for coding assistants like Cursor, Claude Code, and similar development tools. It's based on Cloudflare's work towards remote MCPs.",none,beta,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",semgrep_scan,Scan code files for security vulnerabilities with a given config string,"query1: Use Semgrep to semgrep scan for my workflow
+query2: Help me semgrep scan from the documents folder and filter by date range
+query3: Show me how to semgrep scan programmatically and schedule it weekly","scan-semgrep
+security-operations
+resource-orchestration","{
+  ""server_name"": ""Semgrep"",
+  ""purpose"": ""Scan code files for security vulnerabilities with a given config string."",
+  ""tool"": ""semgrep_scan"",
+  ""features"": [
+    ""semgrep scan efficiently"",
+    ""secure authentication and authorization""
+  ],
+  ""use_cases"": [
+    ""streamline semgrep scan workflows"",
+    ""integrate Semgrep into automated processes"",
+    ""build custom solutions leveraging Semgrep capabilities""
+  ],
+  ""examples"": [
+    ""Use Semgrep to semgrep scan for my workflow"",
+    ""Help me semgrep scan from the documents folder and filter by date range"",
+    ""Show me how to semgrep scan programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""scan-semgrep"",
+    ""security-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Semgrep,https://github.com/semgrep/mcp,"Sentry's MCP service is primarily designed for human-in-the-loop coding agents. Our tool selection and priorities are focused on developer workflows and debugging use cases, rather than providing a general-purpose MCP server for all Sentry functionality.
+
+This remote MCP server acts as middleware to the upstream Sentry API, optimized for coding assistants like Cursor, Claude Code, and similar development tools. It's based on Cloudflare's work towards remote MCPs.",none,beta,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",semgrep_scan_with_custom_rule,Scan code files using a custom Semgrep rule,"query1: Use Semgrep to semgrep scan with custom rule for my workflow
+query2: Help me semgrep scan with custom rule from the documents folder and filter by date range
+query3: Show me how to semgrep scan with custom rule programmatically and schedule it weekly","scan-semgrep--with-custom-rule
+file-operations
+resource-orchestration","{
+  ""server_name"": ""Semgrep"",
+  ""purpose"": ""Scan code files using a custom Semgrep rule."",
+  ""tool"": ""semgrep_scan_with_custom_rule"",
+  ""features"": [
+    ""semgrep scan with custom rule efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline semgrep scan with custom rule workflows"",
+    ""integrate Semgrep into automated processes"",
+    ""build custom solutions leveraging Semgrep capabilities""
+  ],
+  ""examples"": [
+    ""Use Semgrep to semgrep scan with custom rule for my workflow"",
+    ""Help me semgrep scan with custom rule from the documents folder and filter by date range"",
+    ""Show me how to semgrep scan with custom rule programmatically and schedule it weekly""
+  ],
+  ""tags"": [
+    ""scan-semgrep--with-custom-rule"",
+    ""file-operations"",
+    ""resource-orchestration""
+  ]
+}"
+Semgrep,https://github.com/semgrep/mcp,"Sentry's MCP service is primarily designed for human-in-the-loop coding agents. Our tool selection and priorities are focused on developer workflows and debugging use cases, rather than providing a general-purpose MCP server for all Sentry functionality.
+
+This remote MCP server acts as middleware to the upstream Sentry API, optimized for coding assistants like Cursor, Claude Code, and similar development tools. It's based on Cloudflare's work towards remote MCPs.",none,beta,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",get_abstract_syntax_tree,Output the Abstract Syntax Tree (AST) of code,"query1: I need to get abstract syntax tree from Semgrep for my current project
+query2: Execute get abstract syntax tree with parameters from my configuration file
+query3: Automate get abstract syntax tree to run daily at 9 AM and save output to my dashboard","get-abstract-syntax-tree
+automation-tool
+resource-orchestration","{
+  ""server_name"": ""Semgrep"",
+  ""purpose"": ""Output the Abstract Syntax Tree (AST) of code."",
+  ""tool"": ""get_abstract_syntax_tree"",
+  ""features"": [
+    ""get abstract syntax tree efficiently""
+  ],
+  ""use_cases"": [
+    ""streamline get abstract syntax tree workflows"",
+    ""integrate Semgrep into automated processes"",
+    ""build custom solutions leveraging Semgrep capabilities""
+  ],
+  ""examples"": [
+    ""I need to get abstract syntax tree from Semgrep for my current project"",
+    ""Execute get abstract syntax tree with parameters from my configuration file"",
+    ""Automate get abstract syntax tree to run daily at 9 AM and save output to my dashboard""
+  ],
+  ""tags"": [
+    ""get-abstract-syntax-tree"",
+    ""automation-tool"",
+    ""resource-orchestration""
+  ]
+}"
+Semgrep,https://github.com/semgrep/mcp,"Sentry's MCP service is primarily designed for human-in-the-loop coding agents. Our tool selection and priorities are focused on developer workflows and debugging use cases, rather than providing a general-purpose MCP server for all Sentry functionality.
+
+This remote MCP server acts as middleware to the upstream Sentry API, optimized for coding assistants like Cursor, Claude Code, and similar development tools. It's based on Cloudflare's work towards remote MCPs.",none,beta,"cursor
+claude_desktop
+ChatGPT
+GeminiCLI",semgrep_findings,"Fetch Semgrep findings from the Semgrep AppSec Platform API","query1: Use Semgrep to semgrep findings for my workflow
+query2: Make an API call to semgrep findings with JSON payload and return results
+query3: Integrate Semgrep to semgrep findings and sync with my CRM system","semgrep-findings
+api-integration
+rest-api-access","{
+  ""server_name"": ""Semgrep"",
+  ""purpose"": ""Fetch Semgrep findings from the Semgrep AppSec Platform API."",
+  ""tool"": ""semgrep_findings"",
+  ""features"": [
+    ""semgrep findings efficiently""
+  ],
+  ""use_cases"": [
+    ""integrate Semgrep API into custom applications""
+  ],
+  ""examples"": [
+    ""Use Semgrep to semgrep findings for my workflow"",
+    ""Make an API call to semgrep findings with JSON payload and return results"",
+    ""Integrate Semgrep to semgrep findings and sync with my CRM system""
+  ],
+  ""tags"": [
+    ""semgrep-findings"",
+    ""api-integration"",
+    ""rest-api-access""
+  ]
+}"
