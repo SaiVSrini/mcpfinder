@@ -132,22 +132,26 @@ Lexical-only (TF-IDF)
 ---------------------
 Precision@1: 0.593   (Good at exact keyword matches)
 Precision@3: 0.667
+Recall@3:    0.667
 MRR:         0.668
 
 Hybrid (Lexical + Embedding + Intent)
 -------------------------------------
 Precision@1: 0.444   (Struggles with noisy embeddings)
 Precision@3: 0.593
-MRR:         0.549
+Recall@3:    0.593
+MRR:         0.545
 
 Hybrid + LLM Rerank
 -------------------
 Precision@1: 0.700   (The Winner: Best at understanding intent)
 Precision@3: 0.700
+Recall@3:    0.700
 MRR:         0.700
 ```
 
 *   **Precision@1**: How often the #1 answer was correct (70% for LLM).
+*   **Recall@3**: How many of the correct answers I found in my top 3 results.
 *   **MRR**: A score of "how high up" the right answer was. Higher is better.
 
 ---
