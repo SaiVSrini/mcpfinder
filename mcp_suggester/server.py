@@ -10,7 +10,6 @@ from .llm_rerank import llm_rerank
 from .models import ServerSuggestion
 from .scoring import select_candidates
 
-# This is the MCP app object that Cursor (or any MCP client) will talk to.
 mcp = FastMCP(name="MCP Suggestion Engine")
 
 
@@ -19,15 +18,9 @@ def suggest_mcp_servers_impl(
     top_n: int = 3,
     max_candidates: int = 20,
     filter_tags: Optional[List[str]] = None,
+    preferred_client: Optional[str] = None,
 ) -> List[ServerSuggestion]:
-    """
-    Suggest the best MCP servers and tools for the given user query.
-
-    The logic is:
-    - Load the catalog from SQLite.
-    - Score every tool against the query and pick a shortlist.
-    - Ask the reranker (LLM or heuristic) to group and rank servers.
-    """
+    # Load all tools, understand the query, score them, then ask GPT to pick the best
     catalog_entries = get_catalog()
     intent = extract_intent(user_query)
     candidates = select_candidates(
@@ -38,6 +31,7 @@ def suggest_mcp_servers_impl(
         filter_tags=filter_tags,
     )
 
+    # If nothing matches, return empty result
     if not candidates:
         return [
             {
@@ -52,7 +46,6 @@ def suggest_mcp_servers_impl(
             }
         ]
 
-    # Use LLM rerank when possible; it already falls back on failure.
     return llm_rerank(user_query, candidates, top_n)
 
 
@@ -63,9 +56,6 @@ def suggest_mcp_servers(
     max_candidates: int = 20,
     filter_tags: Optional[List[str]] = None,
 ) -> List[ServerSuggestion]:
-    """
-    FastMCP exposed tool proxying to the core implementation.
-    """
     return suggest_mcp_servers_impl(
         user_query=user_query,
         top_n=top_n,
@@ -75,9 +65,6 @@ def suggest_mcp_servers(
 
 
 def get_mcp_app() -> FastMCP:
-    """
-    Return the FastMCP application instance.
-    """
     return mcp
 
 

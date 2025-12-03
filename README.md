@@ -49,6 +49,20 @@ I can run the server directly to test it:
 python -m mcp_suggester.server
 ```
 
+### 4. Using the Web UI (Optional)
+If you want a visual interface to test queries, you can use the Streamlit app:
+
+```bash
+streamlit run ui_app.py
+```
+
+This opens a browser window where you can:
+*   Type your query in a text box
+*   Adjust settings with sliders (number of results, candidate pool size)
+*   See the results with nice formatting, reasoning, and copy-pasteable examples
+
+No need to run the server separately—the UI app calls the logic directly.
+
 ## Using It in Cursor
 
 This is the best part. I connect this "router" to Cursor so I can use it while I code.

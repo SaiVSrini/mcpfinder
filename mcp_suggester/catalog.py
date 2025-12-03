@@ -12,9 +12,6 @@ _CACHE: Optional[List[CatalogEntry]] = None
 
 
 def _split_multi_value(raw_value: Optional[str]) -> List[str]:
-    """
-    Normalize newline and comma separated fields into a clean list.
-    """
     if not raw_value:
         return []
     cleaned = raw_value.replace("\r", "\n")
@@ -29,9 +26,6 @@ def _split_multi_value(raw_value: Optional[str]) -> List[str]:
 
 
 def _split_examples(raw_value: Optional[str]) -> List[str]:
-    """
-    Split the example_queries blob into individual examples.
-    """
     if not raw_value:
         return []
     cleaned = raw_value.replace("\r", "\n")
@@ -39,9 +33,6 @@ def _split_examples(raw_value: Optional[str]) -> List[str]:
 
 
 def _parse_vector(raw_value: Optional[str]) -> Optional[List[float]]:
-    """
-    Parse a JSON list of floats out of the embedded_vector column.
-    """
     cleaned = (raw_value or "").strip()
     if not cleaned:
         return None
@@ -58,9 +49,6 @@ def _parse_vector(raw_value: Optional[str]) -> Optional[List[float]]:
 
 
 def _hydrate_entry(row: sqlite3.Row) -> CatalogEntry:
-    """
-    Build a CatalogEntry model from the SQLite row.
-    """
     capability_tags = _split_multi_value(row["capability_tags"])
     example_queries = _split_examples(row["example_queries"])
     compatability = _split_multi_value(row["compatability"])
@@ -82,9 +70,7 @@ def _hydrate_entry(row: sqlite3.Row) -> CatalogEntry:
 
 
 def load_catalog_once() -> List[CatalogEntry]:
-    """
-    Load the catalog SQLite DB into CatalogEntry objects once and cache the result.
-    """
+    # Load the database into memory (we only do this once)
     global _CACHE
 
     db_path = get_catalog_db_path()
@@ -120,9 +106,7 @@ def load_catalog_once() -> List[CatalogEntry]:
 
 
 def get_catalog() -> List[CatalogEntry]:
-    """
-    Return the catalog entries, loading them once if needed.
-    """
+    # Return cached tools, or load them if this is the first call
     global _CACHE
     if _CACHE is None:
         _CACHE = load_catalog_once()

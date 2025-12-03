@@ -49,18 +49,12 @@ FREE_HINTS = {"free", "opensource", "open-source", "no-cost"}
 
 
 def _tokenize(text: str) -> List[str]:
-    """
-    Tiny tokenizer for intent extraction.
-    """
     if not text:
         return []
     return _TOKEN_PATTERN.findall(text.lower())
 
 
 def _normalize_auth(preferred_auth: Optional[str]) -> Optional[str]:
-    """
-    Map natural language strings to a small set of auth values.
-    """
     if not preferred_auth:
         return None
     normalized = preferred_auth.strip().lower()
@@ -77,10 +71,6 @@ def _normalize_auth(preferred_auth: Optional[str]) -> Optional[str]:
 
 @dataclass
 class QueryIntent:
-    """
-    Structured interpretation of a free-form user query.
-    """
-
     raw_query: str
     capability_hints: List[str] = field(default_factory=list)
     must_be_local: bool = False
@@ -101,11 +91,9 @@ class QueryIntent:
 
 
 def _heuristic_intent(user_query: str) -> QueryIntent:
-    """
-    Lightweight keyword-based intent extraction.
-    """
     tokens = _tokenize(user_query)
     hints: Set[str] = set()
+    # Look for keywords that tell me what kind of tool they want
     for token in tokens:
         mapped = CAPABILITY_KEYWORDS.get(token)
         if mapped:
@@ -135,9 +123,6 @@ def _heuristic_intent(user_query: str) -> QueryIntent:
 
 
 def _call_llm_for_intent(user_query: str) -> Optional[dict]:
-    """
-    Ask a lightweight OpenAI model to classify the query intent.
-    """
     if not has_openai_api_key():
         return None
     api_key = get_openai_api_key()
@@ -181,9 +166,7 @@ def _call_llm_for_intent(user_query: str) -> Optional[dict]:
 
 
 def extract_intent(user_query: str, use_llm: bool = True) -> QueryIntent:
-    """
-    Primary entry point: heuristics first, optionally refined by the LLM.
-    """
+    # Start with keyword matching, then refine with GPT if available
     intent = _heuristic_intent(user_query)
     if not use_llm:
         return intent

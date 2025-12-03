@@ -57,9 +57,6 @@ class ScoredEntry:
 
 
 class LexicalIndex:
-    """
-    Tiny TF-IDF index built from the catalog at runtime.
-    """
 
     def __init__(self, entries: Sequence[CatalogEntry]):
         self.document_count = len(entries)
@@ -78,6 +75,7 @@ class LexicalIndex:
         if not doc_freq:
             return
 
+        # Calculate IDF scores - rare words get higher scores
         for token, freq in doc_freq.items():
             self.idf[token] = math.log((self.document_count + 1) / (freq + 1)) + 1.0
 
@@ -117,9 +115,6 @@ _LEXICAL_INDEX_CACHE: Dict[int, LexicalIndex] = {}
 
 
 def tokenize(text: str) -> List[str]:
-    """
-    Turn a piece of text into simple lowercase tokens.
-    """
     if not text:
         return []
     return _TOKEN_PATTERN.findall(text.lower())
@@ -136,9 +131,6 @@ def _get_lexical_index(entries: Sequence[CatalogEntry]) -> LexicalIndex:
 
 
 def cosine_similarity(first_vector: List[float], second_vector: List[float]) -> float:
-    """
-    Standard cosine similarity with zero-norm checks.
-    """
     if not first_vector or not second_vector or len(first_vector) != len(second_vector):
         return 0.0
     dot_product = sum(x * y for x, y in zip(first_vector, second_vector))
@@ -167,7 +159,7 @@ def generate_query_embedding(user_query: str) -> Optional[List[float]]:
             input=user_query,
         )
         return resp.data[0].embedding
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:  
         print(f"WARNING: Failed to generate query embedding: {exc}")
         return None
 
@@ -232,19 +224,19 @@ def _intent_alignment(entry: CatalogEntry, intent: QueryIntent) -> float:
 
 def _intent_penalty(entry: CatalogEntry, intent: QueryIntent) -> float:
     penalty = 0.0
-    # Reduced penalties - they were too harsh
+
     if intent.must_be_local and not _entry_is_local(entry):
-        penalty += 0.20  # Was 0.35
+        penalty += 0.20  
     if intent.must_be_free and not _entry_is_free(entry):
-        penalty += 0.15  # Was 0.25
+        penalty += 0.15 
 
     preferred_auth = (intent.preferred_auth or "").lower()
     entry_auth = (entry.auth_type or "").lower()
     if preferred_auth:
         if preferred_auth == "none" and entry_auth and entry_auth not in {"none", "local"}:
-            penalty +=0.08  # Was 0.15
+            penalty +=0.08 
         elif preferred_auth not in entry_auth and preferred_auth != "none":
-            penalty += 0.03  # Was 0.05
+            penalty += 0.03 
     return penalty
 
 
@@ -256,8 +248,7 @@ def _combine_scores(
     embedding_score = max(embedding_score, 0.0)
     if not has_embedding:
         return 0.85 * lexical_score
-    # Adjusted: Give more weight to lexical (0.70) since embeddings seem noisy
-    # Original was 0.55 lexical + 0.35 embedding
+    # I give more weight to keyword matching (70%) than embeddings (20%)
     return 0.70 * lexical_score + 0.20 * embedding_score
 
 
