@@ -6,16 +6,11 @@ from typing import Any, Dict, List
 from openai import OpenAI
 
 from .config import get_model_name, get_openai_api_key, has_openai_api_key
-from .models import ServerSuggestion, ToolEntry, ToolSuggestion
-from .scoring import basic_score
+from .models import ServerSuggestion, ToolSuggestion
+from .scoring import ScoredEntry
 
 
 def _first_nonempty_line(text: str) -> str:
-    """
-    Take the first non-empty line from a block of text.
-
-    This is handy for picking a single example query from a multiline field.
-    """
     for line in (text or "").splitlines():
         stripped_line = line.strip()
         if stripped_line:
@@ -25,22 +20,16 @@ def _first_nonempty_line(text: str) -> str:
 
 def heuristic_group_only(
     user_query: str,
-    candidates: List[ToolEntry],
+    candidates: List[ScoredEntry],
     top_n: int = 3,
 ) -> List[ServerSuggestion]:
-    """
-    Group candidates by server_name and score using basic_score with no embeddings.
-
-    This is the fully local, deterministic path that we fall back to when
-    we cannot or do not want to call the LLM.
-    """
     if not candidates:
         return []
 
-    server_groups: Dict[str, List[ToolEntry]] = {}
-    for entry in candidates:
-        # Group all tools by the server that owns them.
-        server_groups.setdefault(entry.server_name, []).append(entry)
+    server_groups: Dict[str, List[ScoredEntry]] = {}
+    # Group all tools by which server they belong to
+    for scored_entry in candidates:
+        server_groups.setdefault(scored_entry.entry.server_name, []).append(scored_entry)
 
     server_suggestions: List[ServerSuggestion] = []
 
@@ -48,27 +37,22 @@ def heuristic_group_only(
         tool_suggestions: List[ToolSuggestion] = []
         tool_scores: List[float] = []
 
-        # Sort tools by heuristic score descending so the “best” tools are first.
-        scored_tools: List[tuple[ToolEntry, float]] = []
-        for entry in group_entries:
-            score = basic_score(user_query, entry, query_embedding=None, filter_tags=None)
-            scored_tools.append((entry, score))
-        scored_tools.sort(key=lambda item: item[1], reverse=True)
+        sorted_group = sorted(group_entries, key=lambda item: item.score, reverse=True)
 
-        for entry, score in scored_tools[:3]:
-            example_query = _first_nonempty_line(entry.example_queries)
+        for scored_entry in sorted_group[:3]:
+            example_query = _first_nonempty_line("\n".join(scored_entry.entry.example_queries))
             tool_suggestions.append(
                 {
-                    "tool_name": entry.tool_name,
-                    "score": float(score),
-                    "reason": "Heuristic match based on keywords and tags.",
+                    "tool_name": scored_entry.entry.tool_name,
+                    "score": float(scored_entry.score),
+                    "reason": "Heuristic match based on hybrid lexical/semantic scoring.",
                     "example_query_to_run": example_query,
                 }
             )
-            tool_scores.append(score)
+            tool_scores.append(scored_entry.score)
 
         server_score = max(tool_scores) if tool_scores else 0.0
-        first_entry = group_entries[0]
+        first_entry = group_entries[0].entry
 
         server_suggestions.append(
             {
@@ -78,7 +62,7 @@ def heuristic_group_only(
                 "maturity": first_entry.maturity,
                 "compatability": list(first_entry.compatability),
                 "score": float(server_score),
-                "reason": "Heuristic grouping based on keyword overlap and capability tags.",
+                "reason": "Heuristic grouping based on hybrid retrieval + capability tags.",
                 "tools": tool_suggestions,
             }
         )
@@ -89,16 +73,13 @@ def heuristic_group_only(
 
 def llm_rerank(
     user_query: str,
-    candidates: List[ToolEntry],
+    candidates: List[ScoredEntry],
     top_n: int = 3,
 ) -> List[ServerSuggestion]:
-    """
-    Use an LLM to rerank and group candidates into server suggestions.
-    Falls back to heuristic_group_only on any failure or when no API key is available.
-    """
     if not candidates:
         return []
 
+    # Fall back to simple grouping if no API key
     if not has_openai_api_key():
         return heuristic_group_only(user_query, candidates, top_n)
 
@@ -106,9 +87,10 @@ def llm_rerank(
     if not api_key:
         return heuristic_group_only(user_query, candidates, top_n)
 
-    # Prepare compact candidate list for the LLM.
+
     llm_candidates: List[Dict[str, Any]] = []
-    for idx, entry in enumerate(candidates):
+    for idx, scored in enumerate(candidates):
+        entry = scored.entry
         llm_candidates.append(
             {
                 "id": idx,
@@ -121,6 +103,7 @@ def llm_rerank(
                 "tool_description": entry.tool_description,
                 "example_queries": entry.example_queries,
                 "capability_tags": entry.capability_tags,
+                "initial_score": scored.score,
             }
         )
 
@@ -177,7 +160,8 @@ def llm_rerank(
         )
         content = completion.choices[0].message.content or ""
 
-        # Strip optional Markdown code fences.
+
+        # GPT sometimes wraps JSON in code blocks, so clean it up
         stripped = content.strip()
         if stripped.startswith("```"):
             stripped = stripped.lstrip("`")
@@ -230,8 +214,6 @@ def llm_rerank(
 
         return suggestions[:top_n]
     except Exception as exc:  # noqa: BLE001
-        # If the LLM call fails for any reason, fall back to a simpler but
-        # predictable heuristic ranking so the caller still gets a result.
         print(
             f"WARNING: LLM rerank failed, falling back to heuristic scoring: {exc}"
         )

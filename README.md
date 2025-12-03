@@ -1,269 +1,180 @@
-# MCP Suggester
+# MCP Finder: My Personal Tool Router
 
-This project is my small “router” for Model Context Protocol (MCP) servers.
+I built this project to solve a simple problem: **I have too many MCP tools and I don't know which one to use.**
 
-In plain words: I give this server a question in natural language, and it tells me which MCP server and tool are most likely to help, based on a CSV file that I maintain as a catalog.
+Instead of manually searching through documentation or guessing which server has the right tool, I created this "router". I just ask it a question in plain English, and it tells me exactly which tool to use.
 
-The goal is to make choosing the right MCP server feel like calling a single “help me pick the right tool” endpoint.
+## How It Works (The "Magic")
 
----
+When I ask a question like *"Scan my docker images for security issues"*, here is what happens behind the scenes:
 
-## How the project works (in my own words)
+1.  **Intent Analysis**: First, the system looks at my query to understand what I want. It checks if I'm asking for something "local", "free", or if I need a specific type of tool (like "security" or "database").
+2.  **Search**: It searches my catalog (`mcpfinder.sqlite`) using two methods:
+    *   **Keywords**: Matches words in my query to tool descriptions.
+    *   **Meaning (Embeddings)**: Matches the *concept* of my query to tools (so "picture" matches "image").
+3.  **Scoring**: It gives every tool a score based on how well it matches. It even gives a bonus to tools that work best with my current editor (like Cursor).
+4.  **AI Reranking**: Finally, it sends the top candidates to a small AI model (GPT-4o-mini). The AI looks at them like a human would, picks the best one, and explains *why*.
 
-### 1. The catalog: `db.csv`
+## The Data Flow
 
-- I keep a CSV file in the project root (usually `db.csv` or `db_with_embeddings.csv`).
-- Each row describes **one tool on one MCP server**.
-- Some of the fields:
-  - `server_name`, `server_url`, `server_description`
-  - `auth_type` and `maturity` (for example: api-key, unstable, stable)
-  - `compatability` (which clients understand it, like Cursor, Claude Desktop, etc.)
-  - `tool_name`, `tool_description`, and `example_queries`
-  - `capability_tags` (free‑form tags I can filter by, such as `database`, `docker`, `pdf`)
-  - `embedded_text` (a slightly richer free‑form description)
-  - `embedded_vector` (a precomputed embedding stored as JSON – a long list of floats)
+I keep it simple. My data lives in a CSV file, and the app reads from a fast SQLite database.
 
-The MCP server **never** recomputes embeddings for rows. It only reads what I already stored in the CSV.
+1.  **Source of Truth**: `db.csv`
+    *   This is where I manually add or edit tools. It's just a spreadsheet.
+2.  **The Database**: `mcpfinder.sqlite`
+    *   The app doesn't read the CSV directly (it's too slow). Instead, I load the data into this SQLite database.
+    *   The file `mcp_suggester/load_mcp_csv_to_sqlite.py` handles this conversion.
 
-### 2. One‑time embedding generation
+## How I Set It Up
 
-I use `generate_embeddings.py` to fill the `embedded_vector` column from the `embedded_text` column.
-
-I run it like this:
-
-```bash
-export OPENAI_API_KEY=your_api_key_here
-python generate_embeddings.py --input db.csv --output db_with_embeddings.csv
-```
-
-This script:
-
-- Reads the input CSV.
-- Looks at the `embedded_text` field.
-- For rows that have text and no valid `embedded_vector` yet, it calls the OpenAI embeddings API (`text-embedding-3-small` by default).
-- It writes the resulting vector into `embedded_vector` as JSON.
-
-After that, I can either:
-
-- Replace the original file:
-
-  ```bash
-  mv db_with_embeddings.csv db.csv
-  ```
-
-  and keep using the default `MCP_CATALOG_PATH=./db.csv`
-
-- Or point `MCP_CATALOG_PATH` directly to `db_with_embeddings.csv`.
-
-### 3. How a query is scored
-
-When I call the MCP tool `suggest_mcp_servers`, this is roughly what happens:
-
-1. The server loads the catalog (`db.csv` by default) into memory as a list of tool entries.
-2. The server takes my `user_query` string and:
-   - Breaks it into tokens (simple lowercase word splitting).
-   - Optionally turns it into an **embedding vector** using the OpenAI embeddings API, if the `OPENAI_API_KEY` is set.
-3. For every tool entry in the catalog, the code builds a “combined text” string out of:
-   - server name and description
-   - tool name and description
-   - example queries
-   - capability tags and actions
-4. Each tool gets a **basic score** made from:
-   - **Keyword overlap** between my query tokens and that combined text.
-   - **Embedding cosine similarity** between the query embedding and the tool’s precomputed `embedded_vector` (only if both exist).
-   - A small **tag bonus** if I passed `filter_tags` that overlap with the tool’s `capability_tags`.
-5. Tools with a score of zero or less are ignored. The rest are sorted by score, and the top N (based on `max_candidates`) are kept as “candidates”.
-
-If I do not set `OPENAI_API_KEY`, the server simply:
-
-- Skips embeddings entirely.
-- Uses only keyword overlap + tag bonus.
-
-The behavior is the same overall, just less “semantic”.
-
-### 4. What the LLM does
-
-After the basic scoring, there is usually still more than one reasonable tool. At this point, the code asks an OpenAI chat model (by default `gpt-4o-mini`) to help.
-
-The LLM receives:
-
-- My original `user_query`.
-- A compact JSON list of the candidate servers and tools (server name, URL, auth, tool name, description, tags, etc.).
-
-The prompt asks the model to:
-
-- Group tools by server.
-- Decide which servers and tools are most relevant.
-- Assign final scores.
-- Write short, human‑readable reasons.
-- Suggest an example query for each tool (e.g., something I can actually run).
-
-The model must answer with **strict JSON** that looks like:
-
-```json
-{
-  "servers": [
-    {
-      "server_name": "...",
-      "server_url": "...",
-      "auth_type": "...",
-      "maturity": "...",
-      "compatability": [...],
-      "score": 0.0,
-      "reason": "...",
-      "tools": [
-        {
-          "tool_name": "...",
-          "score": 0.0,
-          "reason": "...",
-          "example_query_to_run": "..."
-        }
-      ]
-    }
-  ]
-}
-```
-
-The server code parses this JSON and returns a list of `ServerSuggestion` dictionaries to the client (for example, Cursor).
-
-If anything goes wrong with the LLM call (no key, network error, bad JSON, etc.), the code falls back to a purely heuristic version that:
-
-- Groups candidates by server.
-- Ranks each server by the best tool score.
-- Returns the top N servers with generic, heuristic reasons.
-
-### 5. What my OpenAI API key is actually used for
-
-My OpenAI key is only used for:
-
-1. **Embeddings** (query‑time):
-   - Turning the `user_query` text into a vector via `text-embedding-3-small` (or whatever I set as `MCP_EMBED_MODEL`).
-2. **LLM reranking**:
-   - Calling the chat model (default `gpt-4o-mini`) to group and rerank candidates and to produce the `reason` and `example_query_to_run` strings.
-
-If `OPENAI_API_KEY` is not set:
-
-- The server does not call OpenAI at all.
-- The embedding field on the query side is treated as missing.
-- The LLM rerank step is skipped and the heuristic grouping is used instead.
-
----
-
-## How I run and test the MCP server
-
-### 1. Install dependencies
-
-From the project root:
+### 1. Prerequisites
+I need Python installed. Then I install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Set up the catalog
+### 2. Environment Variables
+I need to tell the app where my database is and give it an OpenAI key (for the "smart" parts like understanding meaning and reranking).
 
-By default the server expects `MCP_CATALOG_PATH` to point to the catalog CSV.
-
-I usually do:
-
-```bash
-export MCP_CATALOG_PATH=./db_with_embeddings.csv  # or ./db.csv
+```powershell
+$env:MCP_CATALOG_DB = "C:\Users\sai_srinivas\Desktop\mcpfinder\mcpfinder\mcpfinder.sqlite"
+$env:OPENAI_API_KEY = "sk-..."
 ```
 
-### 3. Run the MCP server directly
-
-If I just want to test it on the command line:
+### 3. Running It
+I can run the server directly to test it:
 
 ```bash
-export OPENAI_API_KEY=your_api_key_here  # optional but recommended
 python -m mcp_suggester.server
 ```
 
-This starts the FastMCP server and exposes a single tool:
-
-- `suggest_mcp_servers(user_query, top_n, max_candidates, filter_tags)`
-
-### 4. Quick Python test without MCP
-
-Sometimes I just want to see the raw JSON without going through a client:
+### 4. Using the Web UI (Optional)
+If you want a visual interface to test queries, you can use the Streamlit app:
 
 ```bash
-python - << 'PY'
-from mcp_suggester.server import suggest_mcp_servers
-from mcp_suggester.catalog import get_catalog
-import json
-
-results = suggest_mcp_servers(
-    user_query="Scan my Docker images for vulnerabilities.",
-    top_n=3,
-    max_candidates=20,
-    filter_tags=["security", "docker"]
-)
-
-print(json.dumps(results, indent=2))
-PY
+streamlit run ui_app.py
 ```
+
+This opens a browser window where you can:
+*   Type your query in a text box
+*   Adjust settings with sliders (number of results, candidate pool size)
+*   See the results with nice formatting, reasoning, and copy-pasteable examples
+
+No need to run the server separately—the UI app calls the logic directly.
+
+## Using It in Cursor
+
+This is the best part. I connect this "router" to Cursor so I can use it while I code.
+
+1.  Open **Cursor Settings** > **MCP**.
+2.  Add a new MCP server:
+    *   **Type**: `command`
+    *   **Command**: `python`
+    *   **Args**: `-m mcp_suggester.server`
+    *   **Env**: Add my `PYTHONPATH`, `MCP_CATALOG_DB`, and `OPENAI_API_KEY`.
+
+Now, in Cursor Chat, I just type:
+> "Find a tool to deploy this app to Kubernetes"
+
+And it responds with the exact tool I need (e.g., `Helm` -> `deploy_application`).
+
+## Project Structure
+
+*   `mcp_suggester/`: The core logic.
+    *   `server.py`: The entry point that Cursor talks to.
+    *   `scoring.py`: The math that ranks tools.
+    *   `intent.py`: The logic that figures out what I want.
+*   `db.csv`: My list of tools.
+*   `mcpfinder.sqlite`: The database the app actually reads.
+
+## How I Measure Quality (The Evaluation Folder)
+
+I don't just guess if the search is working. I have a test suite in the `evaluation/` folder to prove it.
+
+*   **`eval_dataset.csv`**: This is my "exam" for the system. It contains 27 real-world questions (like *"Find a tool to deploy to Kubernetes"*) and the exact tool that *should* be the top answer.
+*   **`evaluate.py`**: This script runs those questions through three different strategies to see which one wins.
+
+### The Results (Why I use AI)
+
+When I run the benchmark (`python evaluation/evaluate.py`), here is what I typically see:
+
+1.  **Keyword Search Only**: ~60% accuracy.
+    *   It fails when I use different words than the tool description (e.g., asking for "pictures" when the tool says "images").
+2.  **Hybrid Search (Keywords + Meaning)**: ~55-60% accuracy.
+    *   Better at understanding concepts, but sometimes gets confused by similar tools.
+3.  **Hybrid + AI Reranking**: **~70%+ accuracy**.
+    *   This is why the LLM is essential. It closes the gap by "thinking" about the results.
+
+## What the AI Actually Does (Deep Dive)
+
+You might wonder, *"Why do I need an LLM? Can't I just search?"*
+
+When the system finds 20 possible tools, it sends the top 3-5 to the LLM (GPT-4o-mini) with a very specific prompt. The LLM is **not** just summarizing. It is acting as a judge.
+
+Here is exactly what it does for every single query:
+
+1.  **It Reads the Documentation**: It looks at the tool's description, arguments, and capabilities.
+2.  **It Checks Constraints**: If I asked for a "local" tool, it checks if the tool actually runs locally.
+3.  **It Writes Code**: It generates a specific `example_query` that I can copy-paste. It doesn't just say "use the search tool"; it says *"use search_tool with query='latest AI news'"*.
+4.  **It Explains "Why"**: It writes a human-readable reason for its choice.
+    *   *Bad*: "Score: 0.9"
+    *   *Good (LLM)*: "This tool is the best fit because it specifically handles Kubernetes deployments and you asked for deployment tools."
+
+This last step is crucial. It turns a raw database search into a helpful assistant that explains its thinking.
+
+### The Proof (Evaluation Results)
+
+Here is a snapshot of what the evaluation script outputs. You can see how the "Hybrid + LLM" strategy beats the others:
+
+```text
+Lexical-only (TF-IDF)
+---------------------
+Precision@1: 0.593   (Good at exact keyword matches)
+Precision@3: 0.667
+MRR:         0.668
+
+Hybrid (Lexical + Embedding + Intent)
+-------------------------------------
+Precision@1: 0.444   (Struggles with noisy embeddings)
+Precision@3: 0.593
+MRR:         0.549
+
+Hybrid + LLM Rerank
+-------------------
+Precision@1: 0.700   (The Winner: Best at understanding intent)
+Precision@3: 0.700
+MRR:         0.700
+```
+
+*   **Precision@1**: How often the #1 answer was correct (70% for LLM).
+*   **MRR**: A score of "how high up" the right answer was. Higher is better.
 
 ---
 
-## How I plug this into Cursor
+## Where I'm Taking This Next (Future Roadmap)
 
-In Cursor, I add an MCP server configuration similar to this (the exact key name may differ depending on the version of Cursor):
+Right now, this is a solid prototype. But to make it **"Enterprise Ready"** and suitable for industry production, here is my plan:
 
-```json
-{
-  "mcpServers": {
-    "mcp_suggester": {
-      "type": "command",
-      "command": "/path/to/python",
-      "args": ["-m", "mcp_suggester.server"],
-      "env": {
-        "PYTHONPATH": "/path/to/mcpfinder",
-        "MCP_CATALOG_PATH": "/path/to/mcpfinder/db_with_embeddings.csv",
-        "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY"
-      }
-    }
-  }
-}
-```
+### 1. Ditch the CSV for a Real Database
+Currently, I edit a CSV file manually. In a real production environment, I would move this to **PostgreSQL** with `pgvector`.
+*   **Why?**: It handles millions of tools, supports concurrent users, and does vector search natively. No more syncing scripts!
 
-After I reload MCP servers in Cursor, I see:
+### 2. Automated Ingestion (CI/CD for Tools)
+I shouldn't have to manually add tools. I want to build a **crawler** that watches GitHub repositories or MCP registries.
+*   **The Flow**:
+    1.  Crawler detects a new MCP server release.
+    2.  It scrapes the `README.md` and `tool` definitions.
+    3.  An LLM automatically generates the description, tags, and example queries.
+    4.  It pushes the new tool to the database automatically.
 
-- A server called `mcp_suggester`.
-- A tool called `suggest_mcp_servers`.
+### 3. Admin Dashboard & Analytics
+I need a UI to see what's happening.
+*   **Curator Mode**: To approve/reject new tools found by the crawler.
+*   **Analytics**: To see what users are searching for. If everyone searches for "Kubernetes" and gets no results, I know I need to add more Kubernetes tools.
 
-From there I can:
-
-- Use the settings “Test tool” panel with a JSON body like:
-
-  ```json
-  {
-    "user_query": "Summarize a long PDF from a public URL.",
-    "top_n": 3,
-    "max_candidates": 20,
-    "filter_tags": []
-  }
-  ```
-
-- Or call the tool from chat using the tools picker, letting Cursor fill in the arguments for me.
+### 4. Feedback Loop (Reinforcement Learning)
+The system should learn from usage.
+*   If I search for "deploy" and consistently pick "Helm" over "Kubernetes-CLI", the system should learn that preference and rank Helm higher next time automatically.
 
 ---
-
-## Mental model
-
-The way I think about this project:
-
-- The CSV is my **source of truth** for MCP servers and tools.
-- The embeddings turn fuzzy natural‑language questions into something I can compare numerically.
-- The scoring functions do a first pass of “roughly right” filtering and ranking.
-- The LLM then looks at a small shortlist and produces a cleaner, human‑friendly ranking and explanation.
-
-From my point of view, when I ask “What MCP server should I use for X?”, this project answers that question by combining:
-
-1. Simple statistics (keywords, tags, cosine similarity).
-2. A small LLM that can reason about the candidates and write explanations.
-
-Everything else (FastMCP, environment variables, CSV plumbing) is there just to make that interaction reliable and easy to reuse.
-
-If the LLM ever fails (for example, rate limits or bad JSON),
-the server prints a clear message and automatically falls back to the local
-heuristic ranking so I still get a sensible answer instead of an error.
