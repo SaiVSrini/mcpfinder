@@ -82,6 +82,17 @@ def find_rank(expected_pair: Tuple[str, str], ranked_pairs: Sequence[Tuple[str, 
     return None
 
 
+def recall_at_k(predicted: List[Tuple[str, str]], gold: List[Tuple[str, str]], k: int = 3) -> float:
+    # How many of the correct answers did I find in my top-k predictions?
+    if not gold:
+        return 0.0
+    
+    top_k = set(predicted[:k])
+    gold_set = set(gold)
+    found = len(top_k & gold_set)
+    return found / len(gold_set)
+
+
 def evaluate_strategy(
     name: str,
     rankings: Iterable[Tuple[EvalRecord, List[Tuple[str, str]]]],
@@ -90,6 +101,7 @@ def evaluate_strategy(
     hits_top1 = 0
     hits_top3 = 0
     mrr_total = 0.0
+    recall3_scores = []
 
     for record, ranked_pairs in rankings:
         total += 1
@@ -100,20 +112,27 @@ def evaluate_strategy(
             if rank <= 3:
                 hits_top3 += 1
             mrr_total += 1.0 / rank
+        
+        # Calculate recall@3 for this query
+        r3 = recall_at_k(ranked_pairs, [record.expected_pair], k=3)
+        recall3_scores.append(r3)
 
     precision1 = hits_top1 / total if total else 0.0
     precision3 = hits_top3 / total if total else 0.0
     mrr = mrr_total / total if total else 0.0
+    mean_recall3 = sum(recall3_scores) / len(recall3_scores) if recall3_scores else 0.0
 
     print(f"\n{name}")
     print("-" * len(name))
     print(f"Precision@1: {precision1:.3f}")
     print(f"Precision@3: {precision3:.3f}")
+    print(f"Recall@3:    {mean_recall3:.3f}")
     print(f"MRR:         {mrr:.3f}")
 
     return {
         "precision@1": precision1,
         "precision@3": precision3,
+        "recall@3": mean_recall3,
         "mrr": mrr,
     }
 
