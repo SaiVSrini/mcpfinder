@@ -26,34 +26,41 @@ TOP_N = 3
 class EvalRecord:
     query_id: str
     user_query: str
-    expected_server: str
-    expected_tool: str
+    expected_pairs: set[Tuple[str, str]]
     filter_tags: List[str]
-
-    @property
-    def expected_pair(self) -> Tuple[str, str]:
-        return (self.expected_server.lower(), self.expected_tool.lower())
 
 
 def load_dataset() -> List[EvalRecord]:
     if not DATASET_PATH.exists():
         raise FileNotFoundError(f"Evaluation dataset missing at {DATASET_PATH}")
-    records: List[EvalRecord] = []
+    
+    # Group by query_id to handle multiple valid answers
+    grouped: Dict[str, EvalRecord] = {}
+    
     with DATASET_PATH.open("r", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            filter_field = (row.get("filter_tags") or "").strip()
-            tags = [tag.strip() for tag in filter_field.split(";") if tag.strip()]
-            records.append(
-                EvalRecord(
-                    query_id=str(row.get("query_id") or ""),
+            qid = str(row.get("query_id") or "")
+            if not qid:
+                continue
+                
+            server = (row.get("expected_server") or "").lower()
+            tool = (row.get("expected_tool") or "").lower()
+            pair = (server, tool)
+            
+            if qid not in grouped:
+                filter_field = (row.get("filter_tags") or "").strip()
+                tags = [tag.strip() for tag in filter_field.split(";") if tag.strip()]
+                grouped[qid] = EvalRecord(
+                    query_id=qid,
                     user_query=row.get("user_query") or "",
-                    expected_server=row.get("expected_server") or "",
-                    expected_tool=row.get("expected_tool") or "",
+                    expected_pairs={pair},
                     filter_tags=tags,
                 )
-            )
-    return records
+            else:
+                grouped[qid].expected_pairs.add(pair)
+                
+    return list(grouped.values())
 
 
 def flatten_scored_entries(scored_entries: Sequence[ScoredEntry]) -> List[Tuple[str, str]]:
@@ -75,22 +82,22 @@ def flatten_server_suggestions(suggestions: Sequence[Dict]) -> List[Tuple[str, s
     return flat
 
 
-def find_rank(expected_pair: Tuple[str, str], ranked_pairs: Sequence[Tuple[str, str]]) -> Optional[int]:
+def find_best_rank(expected_pairs: set[Tuple[str, str]], ranked_pairs: Sequence[Tuple[str, str]]) -> Optional[int]:
+    # Find the rank of the *first* matching correct answer
     for idx, candidate in enumerate(ranked_pairs, start=1):
-        if candidate == expected_pair:
+        if candidate in expected_pairs:
             return idx
     return None
 
 
-def recall_at_k(predicted: List[Tuple[str, str]], gold: List[Tuple[str, str]], k: int = 3) -> float:
+def recall_at_k(predicted: List[Tuple[str, str]], gold: set[Tuple[str, str]], k: int = 3) -> float:
     # How many of the correct answers did I find in my top-k predictions?
     if not gold:
         return 0.0
     
     top_k = set(predicted[:k])
-    gold_set = set(gold)
-    found = len(top_k & gold_set)
-    return found / len(gold_set)
+    found = len(top_k & gold)
+    return found / len(gold)
 
 
 def evaluate_strategy(
@@ -105,7 +112,7 @@ def evaluate_strategy(
 
     for record, ranked_pairs in rankings:
         total += 1
-        rank = find_rank(record.expected_pair, ranked_pairs)
+        rank = find_best_rank(record.expected_pairs, ranked_pairs)
         if rank is not None:
             if rank == 1:
                 hits_top1 += 1
@@ -114,7 +121,7 @@ def evaluate_strategy(
             mrr_total += 1.0 / rank
         
         # Calculate recall@3 for this query
-        r3 = recall_at_k(ranked_pairs, [record.expected_pair], k=3)
+        r3 = recall_at_k(ranked_pairs, record.expected_pairs, k=3)
         recall3_scores.append(r3)
 
     precision1 = hits_top1 / total if total else 0.0

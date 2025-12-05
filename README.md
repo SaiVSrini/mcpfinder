@@ -130,27 +130,27 @@ Here is a snapshot of what the evaluation script outputs. You can see how the "H
 ```text
 Lexical-only (TF-IDF)
 ---------------------
-Precision@1: 0.593   (Good at exact keyword matches)
+Precision@1: 0.593
 Precision@3: 0.667
-Recall@3:    0.667
+Recall@3:    0.611
 MRR:         0.668
 
 Hybrid (Lexical + Embedding + Intent)
 -------------------------------------
-Precision@1: 0.519  (Struggles with noisy embeddings)
-Precision@3: 0.630
-Recall@3:    0.630
-MRR:         0.592
+Precision@1: 0.519
+Precision@3: 0.667
+Recall@3:    0.648
+MRR:         0.599
 
 Hybrid + LLM Rerank
 -------------------
-Precision@1: 0.667   (The Winner: Best at understanding intent)
+Precision@1: 0.700
 Precision@3: 0.741
-Recall@3:    0.741
+Recall@3:    0.725
 MRR:         0.704
 ```
 
-*   **Precision@1**: How often the #1 answer was correct (70% for LLM).
+*   **Precision@1**: How often the #1 answer was correct.
 *   **Recall@3**: How many of the correct answers I found in my top 3 results.
 *   **MRR**: A score of "how high up" the right answer was. Higher is better.
 
