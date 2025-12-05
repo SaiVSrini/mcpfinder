@@ -6,7 +6,7 @@ import streamlit as st
 
 from mcp_suggester.server import suggest_mcp_servers_impl
 
-st.set_page_config(page_title="MCP Finder", page_icon="🧭")
+st.set_page_config(page_title="MCP Finder", page_icon=None)
 st.title("MCP Finder")
 st.write(
     "Enter a task in natural language and this app will recommend the most relevant "
