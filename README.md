@@ -4,7 +4,7 @@ I built this project to solve a simple problem: **I have too many MCP tools and 
 
 Instead of manually searching through documentation or guessing which server has the right tool, I created this "router". I just ask it a question in plain English, and it tells me exactly which tool to use.
 
-## How It Works (The "Magic")
+## How It Works 
 
 When I ask a question like *"Scan my docker images for security issues"*, here is what happens behind the scenes:
 
@@ -38,7 +38,7 @@ pip install -r requirements.txt
 I need to tell the app where my database is and give it an OpenAI key (for the "smart" parts like understanding meaning and reranking).
 
 ```powershell
-$env:MCP_CATALOG_DB = "C:\Users\sai_srinivas\Desktop\mcpfinder\mcpfinder\mcpfinder.sqlite"
+$env:MCP_CATALOG_DB = ""
 $env:OPENAI_API_KEY = "sk-..."
 ```
 
@@ -88,14 +88,14 @@ And it responds with the exact tool I need (e.g., `Helm` -> `deploy_application`
 *   `db.csv`: My list of tools.
 *   `mcpfinder.sqlite`: The database the app actually reads.
 
-## How I Measure Quality (The Evaluation Folder)
+## How I Measure Quality 
 
 I don't just guess if the search is working. I have a test suite in the `evaluation/` folder to prove it.
 
 *   **`eval_dataset.csv`**: This is my "exam" for the system. It contains 27 real-world questions (like *"Find a tool to deploy to Kubernetes"*) and the exact tool that *should* be the top answer.
 *   **`evaluate.py`**: This script runs those questions through three different strategies to see which one wins.
 
-### The Results (Why I use AI)
+### The Results 
 
 When I run the benchmark (`python evaluation/evaluate.py`), here is what I typically see:
 
@@ -106,7 +106,7 @@ When I run the benchmark (`python evaluation/evaluate.py`), here is what I typic
 3.  **Hybrid + AI Reranking**: **~70%+ accuracy**.
     *   This is why the LLM is essential. It closes the gap by "thinking" about the results.
 
-## What the AI Actually Does (Deep Dive)
+## What the AI Actually Does
 
 You might wonder, *"Why do I need an LLM? Can't I just search?"*
 
@@ -123,7 +123,7 @@ Here is exactly what it does for every single query:
 
 This last step is crucial. It turns a raw database search into a helpful assistant that explains its thinking.
 
-### The Proof (Evaluation Results)
+### The Proof
 
 Here is a snapshot of what the evaluation script outputs. You can see how the "Hybrid + LLM" strategy beats the others:
 
@@ -156,7 +156,7 @@ MRR:         0.704
 
 ---
 
-## Where I'm Taking This Next (Future Roadmap)
+## Where I'm Taking This Next 
 
 Right now, this is a solid prototype. But to make it **"Enterprise Ready"** and suitable for industry production, here is my plan:
 
@@ -164,7 +164,7 @@ Right now, this is a solid prototype. But to make it **"Enterprise Ready"** and 
 Currently, I edit a CSV file manually. In a real production environment, I would move this to **PostgreSQL** with `pgvector`.
 *   **Why?**: It handles millions of tools, supports concurrent users, and does vector search natively. No more syncing scripts!
 
-### 2. Automated Ingestion (CI/CD for Tools)
+### 2. Automated Ingestion 
 I shouldn't have to manually add tools. I want to build a **crawler** that watches GitHub repositories or MCP registries.
 *   **The Flow**:
     1.  Crawler detects a new MCP server release.
@@ -177,7 +177,7 @@ I need a UI to see what's happening.
 *   **Curator Mode**: To approve/reject new tools found by the crawler.
 *   **Analytics**: To see what users are searching for. If everyone searches for "Kubernetes" and gets no results, I know I need to add more Kubernetes tools.
 
-### 4. Feedback Loop (Reinforcement Learning)
+### 4. Feedback Loop 
 The system should learn from usage.
 *   If I search for "deploy" and consistently pick "Helm" over "Kubernetes-CLI", the system should learn that preference and rank Helm higher next time automatically.
 
