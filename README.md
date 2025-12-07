@@ -156,6 +156,15 @@ MRR:         0.704
 
 ---
 
+## Demo
+
+Watch the demo video to see MCP Finder in action:
+
+**[View Demo Video](Demo/video2443314079.mp4)** (Click to download/view)
+
+> **Note:** GitHub markdown doesn't support inline video playback. The link above will allow you to download and view the video. 
+---
+
 ## Where I'm Taking This Next 
 
 Right now, this is a solid prototype. But to make it **"Enterprise Ready"** and suitable for industry production, here is my plan:
