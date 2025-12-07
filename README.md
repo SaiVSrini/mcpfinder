@@ -116,8 +116,7 @@ Here is exactly what it does for every single query:
 
 1.  **It Reads the Documentation**: It looks at the tool's description, arguments, and capabilities.
 2.  **It Checks Constraints**: If I asked for a "local" tool, it checks if the tool actually runs locally.
-3.  **It Writes Code**: It generates a specific `example_query` that I can copy-paste. It doesn't just say "use the search tool"; it says *"use search_tool with query='latest AI news'"*.
-4.  **It Explains "Why"**: It writes a human-readable reason for its choice.
+3.  **It Explains "Why"**: It writes a human-readable reason for its choice.
     *   *Bad*: "Score: 0.9"
     *   *Good (LLM)*: "This tool is the best fit because it specifically handles Kubernetes deployments and you asked for deployment tools."
 
