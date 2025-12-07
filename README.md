@@ -156,6 +156,14 @@ MRR:         0.704
 
 ---
 
+## Demo
+
+Watch the demo video to see MCP Finder in action:
+
+https://github.com/user-attachments/assets/video2443314079
+
+---
+
 ## Where I'm Taking This Next 
 
 Right now, this is a solid prototype. But to make it **"Enterprise Ready"** and suitable for industry production, here is my plan:
